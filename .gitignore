@@ -201,3 +201,6 @@ dmypy.json
 
 # vscode
 .vscode
+
+# dataset
+*.png
