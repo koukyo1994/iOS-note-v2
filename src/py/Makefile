@@ -1,5 +1,6 @@
 IMG := ios-note
 TAG := trial
+NSAMPLES := 1000
 
 font-setup:
 	./setup.sh
@@ -15,7 +16,7 @@ env:
 	-w /content \
 	${IMG}:${TAG} /bin/bash
 
-create-dataset-test:
+create-dataset:
 	chmod +x setup.sh
 	make font-setup
-	python dataset.py
+	python dataset.py --n_samples ${NSAMPLES}
