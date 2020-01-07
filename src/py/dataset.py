@@ -63,3 +63,12 @@ def recognition_dataset(batch_size,
     dataset = dataset.map(
         map_fn, num_parallel_calls=tf.data.experimental.AUTOTUNE)
     return dataset
+
+
+if __name__ == "__main__":
+    dataset = recognition_dataset(
+        16, label_path="data/labels.csv", image_path="data/images")
+    for images, labels in dataset:
+        print(images.shape)
+        print(labels)
+        break
