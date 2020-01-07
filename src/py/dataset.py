@@ -12,6 +12,7 @@ CHARS += "!#$%&()*+-./:<=>?@[\]^_{}~'"
 
 def _get_data_generator(label_path: str, image_path: str):
     labels = pd.read_csv(label_path)
+    labels.dropna(how="any", axis=0, inplace=True)
 
     image_path_ = Path(image_path)
 
