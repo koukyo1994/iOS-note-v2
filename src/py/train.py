@@ -29,12 +29,12 @@ if __name__ == "__main__":
         for images, labels in dataset:
             train_step(images, labels)
             if tf.equal(optimizer.iterations % 10, 0):
-                tf.Print("Step", optimizer.iterations, ": Loss :",
+                tf.print("Step", optimizer.iterations, ": Loss :",
                          lossess.result())
 
     for epoch in range(50):
         print(f"Epoch {epoch + 1}")
         train(dataset)
-        tf.Print("Step", optimizer.iterations, ": Loss : ", lossess.result())
+        tf.print("Step", optimizer.iterations, ": Loss : ", lossess.result())
 
     model.save_weights("bin/model_weights.h5")

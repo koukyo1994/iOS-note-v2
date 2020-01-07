@@ -107,7 +107,7 @@ if __name__ == "__main__":
                 image, text = generate_image(height=32, noise=True)
                 width, height = image.size
 
-                if 32 < width < 200:
+                if 32 > width or width > 200:
                     continue
 
                 if text == "":
