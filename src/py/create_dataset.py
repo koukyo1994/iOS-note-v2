@@ -10,6 +10,8 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 from typing import Tuple
 
+from tqdm import tqdm
+
 FONTNAMES = subprocess.run(
     "fc-list :lang=en | sed -r -e 's/^(.+): .*$/\\1/g'",
     stdout=subprocess.PIPE,
@@ -99,7 +101,7 @@ if __name__ == "__main__":
         names = []
         heights = []
         widths = []
-        for i in range(args.n_samples):
+        for i in tqdm(range(args.n_samples)):
             try:
                 name = hashlib.md5(str(i).encode("utf-8")).hexdigest()
                 image, text = generate_image(height=32, noise=True)
