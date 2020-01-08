@@ -16,6 +16,13 @@ if __name__ == "__main__":
     dataset = recognition_dataset(
         64, label_path="data/labels.csv", image_path="data/images")
 
+    @tf.function(
+        input_signature=(tf.TensorSpec(
+            shape=(None, None, None), dtype=tf.float32),
+                         tf.TensorSpec(shape=(None, None), dtype=tf.int32),
+                         tf.TensorSpec(shape=(None, ), dtype=tf.int32),
+                         tf.TensorSpec(shape=(None, ), dtype=tf.int32)))
+    @tf.function
     def train_step(images, labels):
         with tf.GradientTape() as tape:
             y_pred = model(images, training=True)
