@@ -1,6 +1,11 @@
 import tensorflow as tf
 
 
+@tf.function(
+    input_signature=(tf.TensorSpec(shape=(None, None, None), dtype=tf.float32),
+                     tf.TensorSpec(shape=(None, None), dtype=tf.int32),
+                     tf.TensorSpec(shape=(None, ), dtype=tf.int32),
+                     tf.TensorSpec(shape=(None, ), dtype=tf.int32)))
 def recognition_loss(y_pred, y_true, input_width, text_length):
     pred_length = input_width // 4
     cost = tf.keras.backend.ctc_batch_cost(y_true, y_pred,

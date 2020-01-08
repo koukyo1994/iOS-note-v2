@@ -14,14 +14,8 @@ if __name__ == "__main__":
     optimizer = tf.keras.optimizers.Adam(5e-5)
     lossess = tf.keras.metrics.Mean(name="recognition/loss")
     dataset = recognition_dataset(
-        64, label_path="data/labels.csv", image_path="data/images")
+        32, label_path="data/labels.csv", image_path="data/images")
 
-    @tf.function(
-        input_signature=(tf.TensorSpec(
-            shape=(None, None, None), dtype=tf.float32),
-                         tf.TensorSpec(shape=(None, None), dtype=tf.int32),
-                         tf.TensorSpec(shape=(None, ), dtype=tf.int32),
-                         tf.TensorSpec(shape=(None, ), dtype=tf.int32)))
     @tf.function
     def train_step(images, labels):
         with tf.GradientTape() as tape:
