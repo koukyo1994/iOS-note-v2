@@ -115,6 +115,7 @@ def _residual_block(x, filters, stage, blocks, is_first_layer,
 
 
 def get_model(input_shape, n_vocab, n_blocks=3):
+    height = input_shape[0]
     input = tf.keras.layers.Input(shape=input_shape)
     x = _conv_bn_relu(input, filters=64, kernel_size=(7, 7), strides=(2, 2))
     x = L.MaxPooling2D(pool_size=(3, 3), strides=(2, 2), padding="same")(x)
@@ -126,7 +127,14 @@ def get_model(input_shape, n_vocab, n_blocks=3):
         is_first_layer=True,
         transition_strides=[(1, 1), (1, 1)],
         transition_dilation_rates=[1, 1])
+    current_height = height // 4
+    last_block = n_blocks - 1
     for i in range(n_blocks):
+        if i == last_block:
+            stride = current_height
+        else:
+            stride = 2
+
         x = _residual_block(
             x,
             128 * (i + 2),
@@ -134,9 +142,18 @@ def get_model(input_shape, n_vocab, n_blocks=3):
             is_first_layer=False,
             stage=i + 2,
             transition_dilation_rates=[1, 1],
-            transition_strides=[(2, 1), (1, 1)])
+            transition_strides=[(stride, 1), (1, 1)])
+        current_height = current_height // stride
 
     x = L.Lambda(lambda fm: tf.squeeze(fm, axis=1))(x)
     x = L.TimeDistributed(
         L.Dense(n_vocab + 1, activation="softmax", name="softmax"))(x)
     return tf.keras.Model(input, x)
+
+
+if __name__ == "__main__":
+    from dataset import CHARS
+
+    model = get_model(
+        input_shape=(32, None, 3), n_vocab=len(CHARS) + 1, n_blocks=1)
+    model.summary()
