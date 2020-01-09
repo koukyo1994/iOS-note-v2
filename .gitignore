@@ -207,3 +207,4 @@ dmypy.json
 
 # binary
 *.h5
+*.mlmodel
