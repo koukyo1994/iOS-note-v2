@@ -38,4 +38,4 @@ if __name__ == "__main__":
         train(dataset)
         tf.print("Step", optimizer.iterations, ": Loss : ", lossess.result())
 
-    model.save_weights("bin/model_weights.h5")
+    model.save("bin/model_weights.h5")
