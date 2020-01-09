@@ -17,7 +17,7 @@ if __name__ == "__main__":
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
     model = get_model(
-        input_shape=(HEIGHT, None, 3),
+        input_shape=(HEIGHT, 200, 3),
         n_vocab=len(CHARS) + 1,
         n_blocks=config["model"]["n_blocks"])
     optimizer = tf.keras.optimizers.Adam(config["training"]["lr"])

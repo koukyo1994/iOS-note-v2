@@ -1,8 +1,10 @@
 coremltools==3.1
 imgaug==0.2.6
+Keras==2.2.4
+numpy==1.16.4
 opencv-contrib-python-headless==4.1.0.25
 pandas==0.24.2
 sympy==1.3
-tensorflow==2.1.0
+tensorflow==1.14.0
 tfcoreml==1.1
 tqdm==4.28.1

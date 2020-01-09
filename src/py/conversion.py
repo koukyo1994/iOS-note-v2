@@ -1,5 +1,5 @@
+import coremltools
 import tensorflow as tf
-import tfcoreml
 
 import utils
 
@@ -9,6 +9,8 @@ from model import get_model
 if __name__ == "__main__":
     parser = utils.get_parser()
     config = utils.load_config(parser.parse_args())
+
+    tf.compat.v1.enable_eager_execution()
 
     model = get_model(
         input_shape=(32, None, 3),
@@ -20,9 +22,10 @@ if __name__ == "__main__":
     output_node_name = model.outputs[0].name.split(":")[0]
     graph_output_node_name = output_node_name.split("/")[-1]
 
-    coremlmodel = tfcoreml.convert(
-        tf_model_path=config["save_path"],
-        input_name_shape_dict={input_name: (32, 200, 3)},
-        output_feature_names=[graph_output_node_name],
+    coremlmodel = coremltools.converters.tensorflow.convert(
+        config["save_path"],
+        input_names="image",
+        output_names="output",
+        image_input_names="image",
         minimum_ios_deployment_target="13")
     coremlmodel.save(config["mlmodel_path"])

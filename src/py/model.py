@@ -155,6 +155,6 @@ if __name__ == "__main__":
     from dataset import CHARS
 
     model = get_model(
-        input_shape=(32, None, 3), n_vocab=len(CHARS) + 1, n_blocks=1)
+        input_shape=(32, 200, 3), n_vocab=len(CHARS) + 1, n_blocks=1)
     model.summary()
     model.save("bin/sample_weights.h5")
