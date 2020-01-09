@@ -40,7 +40,7 @@ if __name__ == "__main__":
     def train(dataset):
         for images, labels in dataset:
             train_step(images, labels)
-            if tf.equal(optimizer.iterations % 10, 0):
+            if tf.equal(optimizer.iterations % 100, 0):
                 tf.print("Step", optimizer.iterations, ": Loss :",
                          lossess.result())
 

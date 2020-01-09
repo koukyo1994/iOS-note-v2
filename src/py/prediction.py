@@ -24,7 +24,7 @@ if __name__ == "__main__":
     config = utils.load_config(parser.parse_args())
 
     model = get_model(
-        input_shape=(32, 200, 3),
+        input_shape=(32, None, 3),
         n_vocab=len(CHARS) + 1,
         n_blocks=config["model"]["n_blocks"])
     model.load_weights(config["save_path"])
