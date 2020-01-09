@@ -1,3 +1,5 @@
+import argparse
+import json
 import os
 import tensorflow as tf
 
@@ -8,13 +10,25 @@ from model import get_model
 HEIGHT = 32
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", required=True)
+    args = parser.parse_args()
+
+    with open(args.config, mode="r") as f:
+        config = json.load(f)
+
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-    model = get_model(input_shape=(HEIGHT, None, 3), n_vocab=len(CHARS) + 1)
-    optimizer = tf.keras.optimizers.Adam(5e-5)
+    model = get_model(
+        input_shape=(HEIGHT, None, 3),
+        n_vocab=len(CHARS) + 1,
+        n_blocks=config["model"]["n_blocks"])
+    optimizer = tf.keras.optimizers.Adam(config["training"]["lr"])
     lossess = tf.keras.metrics.Mean(name="recognition/loss")
     dataset = recognition_dataset(
-        32, label_path="data/labels.csv", image_path="data/images")
+        config["training"]["batch_size"],
+        label_path=config["dataset"]["label_path"],
+        image_path=config["dataset"]["image_path"])
 
     # @tf.function
     def train_step(images, labels):
@@ -33,9 +47,10 @@ if __name__ == "__main__":
                 tf.print("Step", optimizer.iterations, ": Loss :",
                          lossess.result())
 
-    for epoch in range(50):
+    for epoch in range(config["training"]["n_epochs"]):
         print(f"Epoch {epoch + 1}")
         train(dataset)
         tf.print("Step", optimizer.iterations, ": Loss : ", lossess.result())
 
-    model.save("bin/model_weights.h5")
+        print(f"Save weights at epoch: {epoch}")
+        model.save(config["save_path"])

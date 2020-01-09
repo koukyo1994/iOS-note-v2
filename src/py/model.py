@@ -114,7 +114,7 @@ def _residual_block(x, filters, stage, blocks, is_first_layer,
     return x
 
 
-def get_model(input_shape, n_vocab):
+def get_model(input_shape, n_vocab, n_blocks=3):
     input = tf.keras.layers.Input(shape=input_shape)
     x = _conv_bn_relu(input, filters=64, kernel_size=(7, 7), strides=(2, 2))
     x = L.MaxPooling2D(pool_size=(3, 3), strides=(2, 2), padding="same")(x)
@@ -126,30 +126,16 @@ def get_model(input_shape, n_vocab):
         is_first_layer=True,
         transition_strides=[(1, 1), (1, 1)],
         transition_dilation_rates=[1, 1])
-    x = _residual_block(
-        x,
-        256,
-        stage=2,
-        blocks=2,
-        is_first_layer=False,
-        transition_strides=[(2, 1), (1, 1)],
-        transition_dilation_rates=[1, 1])
-    x = _residual_block(
-        x,
-        512,
-        stage=3,
-        blocks=2,
-        is_first_layer=False,
-        transition_strides=[(2, 1), (1, 1)],
-        transition_dilation_rates=[1, 1])
-    x = _residual_block(
-        x,
-        1024,
-        stage=4,
-        blocks=2,
-        is_first_layer=False,
-        transition_strides=[(2, 1), (1, 1)],
-        transition_dilation_rates=[1, 1])
+    for i in range(n_blocks):
+        x = _residual_block(
+            x,
+            128 * (i + 2),
+            blocks=2,
+            is_first_layer=False,
+            stage=i + 2,
+            transition_dilation_rates=[1, 1],
+            transition_strides=[(2, 1), (1, 1)])
+
     x = L.Lambda(lambda fm: tf.squeeze(fm, axis=1))(x)
     x = L.TimeDistributed(
         L.Dense(n_vocab + 1, activation="softmax", name="softmax"))(x)

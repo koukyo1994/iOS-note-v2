@@ -1,3 +1,6 @@
+import argparse
+import json
+
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
@@ -18,8 +21,18 @@ def predict_text(image: np.ndarray, model: tf.keras.Model) -> str:
 
 
 if __name__ == "__main__":
-    model = get_model(input_shape=(32, None, 3), n_vocab=len(CHARS) + 1)
-    model.load_weights("bin/model_weights.h5")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", required=True)
+    args = parser.parse_args()
+
+    with open(args.config, "r") as f:
+        config = json.load(f)
+
+    model = get_model(
+        input_shape=(32, None, 3),
+        n_vocab=len(CHARS) + 1,
+        n_blocks=config["model"]["n_blocks"])
+    model.load_weights(config["save_path"])
 
     image, text = generate_image(height=32, noise=False)
     img = np.asarray(image)
