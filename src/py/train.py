@@ -1,7 +1,8 @@
-import argparse
-import json
 import os
+
 import tensorflow as tf
+
+import utils
 
 from dataset import recognition_dataset, CHARS
 from loss import recognition_loss
@@ -10,12 +11,8 @@ from model import get_model
 HEIGHT = 32
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--config", required=True)
-    args = parser.parse_args()
-
-    with open(args.config, mode="r") as f:
-        config = json.load(f)
+    parser = utils.get_parser()
+    config = utils.load_config(parser.parse_args())
 
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 

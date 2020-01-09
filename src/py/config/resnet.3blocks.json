@@ -11,5 +11,6 @@
         "batch_size": 32,
         "lr": 5e-5
     },
-    "save_path": "bin/model_weights.h5"
+    "save_path": "bin/3blocks_model_weights.h5",
+    "mlmodel_path": "bin/3blocks_coreml_weights.mlmodel"
 }
