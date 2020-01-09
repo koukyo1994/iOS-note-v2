@@ -16,7 +16,7 @@ if __name__ == "__main__":
     dataset = recognition_dataset(
         32, label_path="data/labels.csv", image_path="data/images")
 
-    @tf.function
+    # @tf.function
     def train_step(images, labels):
         with tf.GradientTape() as tape:
             y_pred = model(images, training=True)
