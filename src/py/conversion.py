@@ -1,3 +1,4 @@
+import tensorflow as tf
 import tfcoreml
 
 import utils
@@ -21,7 +22,7 @@ if __name__ == "__main__":
 
     coremlmodel = tfcoreml.convert(
         tf_model_path=config["save_path"],
-        input_name_shape_dict={input_name: (32, None, 3)},
+        input_name_shape_dict={input_name: (32, 200, 3)},
         output_feature_names=[graph_output_node_name],
         minimum_ios_deployment_target="13")
     coremlmodel.save(config["mlmodel_path"])
