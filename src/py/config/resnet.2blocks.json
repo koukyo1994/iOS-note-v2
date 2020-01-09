@@ -1,0 +1,16 @@
+{
+    "dataset": {
+        "label_path": "data/labels.csv",
+        "image_path": "data/images"
+    },
+    "model": {
+        "n_blocks": 2
+    },
+    "training": {
+        "n_epochs": 50,
+        "batch_size": 32,
+        "lr": 5e-5
+    },
+    "save_path": "bin/2blocks_model_weights.h5",
+    "mlmodel_path": "bin/2blocks_coreml_weights.mlmodel"
+}
