@@ -22,8 +22,7 @@ if __name__ == "__main__":
 
     new_image = np.ones((32, 200, 3), dtype=np.uint8) * 255
     width = image.shape[1]
-    offset = (200 - width) // 2 - 1
-    new_image[:, offset:offset + width, :] = image
+    new_image[:, :width, :] = image
 
     pred = model.predict({"input_1": Image.fromarray(new_image)})["Identity"]
     decoded, _ = tf.keras.backend.ctc_decode(pred[0, 0], [50])

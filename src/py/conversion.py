@@ -22,9 +22,11 @@ if __name__ == "__main__":
     output_node_name = model.outputs[0].name.split(":")[0]
     graph_output_node_name = output_node_name.split("/")[-1]
 
+    model.save(config["save_path"])
+
     coremlmodel = coremltools.converters.tensorflow.convert(
         config["save_path"],
-        input_name_shape_dict={input_name: (32, 200, 3)},
+        input_name_shape_dict={input_name: (1, 32, 200, 3)},
         output_names="output",
         image_input_names=input_name,
         image_scale=2 / 255.0,
