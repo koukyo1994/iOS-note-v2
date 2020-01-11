@@ -15,6 +15,9 @@
 		ECD360EC23C7BA3D00686CD2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ECD360EA23C7BA3D00686CD2 /* LaunchScreen.storyboard */; };
 		ECD360F423C7BAA200686CD2 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD360F323C7BAA200686CD2 /* UIImage+Extension.swift */; };
 		ECD360F623C7BB8100686CD2 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD360F523C7BB8100686CD2 /* UIImageView+Extension.swift */; };
+		ECD360F823C9EC4C00686CD2 /* 2blocks_coreml_weights.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = ECD360F723C9EC4C00686CD2 /* 2blocks_coreml_weights.mlmodel */; };
+		ECD360FA23C9F3CD00686CD2 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD360F923C9F3CD00686CD2 /* Utilities.swift */; };
+		ECD360FC23C9F43600686CD2 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD360FB23C9F43600686CD2 /* CanvasView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +31,9 @@
 		ECD360ED23C7BA3D00686CD2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ECD360F323C7BAA200686CD2 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		ECD360F523C7BB8100686CD2 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		ECD360F723C9EC4C00686CD2 /* 2blocks_coreml_weights.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = 2blocks_coreml_weights.mlmodel; path = ../../py/bin/2blocks_coreml_weights.mlmodel; sourceTree = "<group>"; };
+		ECD360F923C9F3CD00686CD2 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		ECD360FB23C9F43600686CD2 /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +71,9 @@
 				ECD360E323C7BA3900686CD2 /* ViewController.swift */,
 				ECD360F323C7BAA200686CD2 /* UIImage+Extension.swift */,
 				ECD360F523C7BB8100686CD2 /* UIImageView+Extension.swift */,
+				ECD360F723C9EC4C00686CD2 /* 2blocks_coreml_weights.mlmodel */,
+				ECD360F923C9F3CD00686CD2 /* Utilities.swift */,
+				ECD360FB23C9F43600686CD2 /* CanvasView.swift */,
 				ECD360E523C7BA3900686CD2 /* Main.storyboard */,
 				ECD360E823C7BA3D00686CD2 /* Assets.xcassets */,
 				ECD360EA23C7BA3D00686CD2 /* LaunchScreen.storyboard */,
@@ -145,6 +154,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				ECD360F623C7BB8100686CD2 /* UIImageView+Extension.swift in Sources */,
+				ECD360F823C9EC4C00686CD2 /* 2blocks_coreml_weights.mlmodel in Sources */,
+				ECD360FC23C9F43600686CD2 /* CanvasView.swift in Sources */,
+				ECD360FA23C9F3CD00686CD2 /* Utilities.swift in Sources */,
 				ECD360E423C7BA3900686CD2 /* ViewController.swift in Sources */,
 				ECD360E023C7BA3900686CD2 /* AppDelegate.swift in Sources */,
 				ECD360E223C7BA3900686CD2 /* SceneDelegate.swift in Sources */,
