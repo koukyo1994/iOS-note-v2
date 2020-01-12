@@ -25,6 +25,8 @@ if __name__ == "__main__":
     new_image[:, :width, :] = image
 
     pred = model.predict({"input_1": Image.fromarray(new_image)})["Identity"]
+    import pdb
+    pdb.set_trace()
     decoded, _ = tf.keras.backend.ctc_decode(pred[0, 0], [50])
     text = "".join((CHARS[idx - 1] for idx in decoded[0][0].numpy()))
 

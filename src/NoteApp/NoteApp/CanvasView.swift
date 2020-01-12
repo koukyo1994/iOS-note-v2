@@ -191,7 +191,17 @@ class CanvasView: UIImageView {
         guard let observations = request.results
             else { fatalError("unexpected result type from VNCoreMLRequest") }
         let features = observations as! [VNCoreMLFeatureValueObservation]
-        let multiArray = features[0].featureValue.multiArrayValue
-        print("\(multiArray)")
+
+        do {
+            let multiArray = try features[0].featureValue.multiArrayValue!.reshaped(to: [50, 91])
+            for i in 0..<50 {
+                let sliced = multiArray.slice([.select(i), .slice])
+                let pointer = UnsafeMutablePointer<Double>(OpaquePointer(sliced.dataPointer))
+                print(sum(pointer, count: 91))
+            }
+        } catch {
+            print(error)
+            return
+        }
     }
 }

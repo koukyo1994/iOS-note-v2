@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EC7549DE23CB8D65000F33D1 /* MLMultiArray+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7549DD23CB8D65000F33D1 /* MLMultiArray+Extension.swift */; };
+		EC7549E023CB9304000F33D1 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7549DF23CB9303000F33D1 /* Math.swift */; };
 		ECD360E023C7BA3900686CD2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD360DF23C7BA3900686CD2 /* AppDelegate.swift */; };
 		ECD360E223C7BA3900686CD2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD360E123C7BA3900686CD2 /* SceneDelegate.swift */; };
 		ECD360E423C7BA3900686CD2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD360E323C7BA3900686CD2 /* ViewController.swift */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EC7549DD23CB8D65000F33D1 /* MLMultiArray+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MLMultiArray+Extension.swift"; sourceTree = "<group>"; };
+		EC7549DF23CB9303000F33D1 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		ECD360DC23C7BA3900686CD2 /* NoteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NoteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECD360DF23C7BA3900686CD2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ECD360E123C7BA3900686CD2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +78,8 @@
 				ECD360F723C9EC4C00686CD2 /* 2blocks_coreml_weights.mlmodel */,
 				ECD360F923C9F3CD00686CD2 /* Utilities.swift */,
 				ECD360FB23C9F43600686CD2 /* CanvasView.swift */,
+				EC7549DD23CB8D65000F33D1 /* MLMultiArray+Extension.swift */,
+				EC7549DF23CB9303000F33D1 /* Math.swift */,
 				ECD360E523C7BA3900686CD2 /* Main.storyboard */,
 				ECD360E823C7BA3D00686CD2 /* Assets.xcassets */,
 				ECD360EA23C7BA3D00686CD2 /* LaunchScreen.storyboard */,
@@ -158,9 +164,11 @@
 				ECD360FC23C9F43600686CD2 /* CanvasView.swift in Sources */,
 				ECD360FA23C9F3CD00686CD2 /* Utilities.swift in Sources */,
 				ECD360E423C7BA3900686CD2 /* ViewController.swift in Sources */,
+				EC7549DE23CB8D65000F33D1 /* MLMultiArray+Extension.swift in Sources */,
 				ECD360E023C7BA3900686CD2 /* AppDelegate.swift in Sources */,
 				ECD360E223C7BA3900686CD2 /* SceneDelegate.swift in Sources */,
 				ECD360F423C7BAA200686CD2 /* UIImage+Extension.swift in Sources */,
+				EC7549E023CB9304000F33D1 /* Math.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
