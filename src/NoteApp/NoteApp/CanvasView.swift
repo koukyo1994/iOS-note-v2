@@ -8,12 +8,13 @@
 
 import Foundation
 import UIKit
+import Vision
+import CoreML
 
 
 class CanvasView: UIImageView {
     private let baseSize: CGFloat = 5.0
     private var color: UIColor = .black
-    private var isWriting = false
     
     private var ruledLineHeight: CGFloat = 30.0
 
@@ -28,7 +29,6 @@ class CanvasView: UIImageView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
         if touch.type == UITouch.TouchType.stylus {
-            isWriting = true
             let point = touch.location(in: self)
             
             let date = Date()
@@ -61,11 +61,17 @@ class CanvasView: UIImageView {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-            self.isWriting = false
-            if !self.isWriting {
-                if let rect = self.getBoundingBox(
-                    self.collectRegionOfInterest()) {
-                    self.displayRegionOfInterest(rect: rect)
+            if let rect = self.getBoundingBox(
+                self.collectRegionOfInterest()) {
+                self.displayRegionOfInterest(rect: rect)
+                
+                if let croppedImage = self.image?.cropRect(rect: rect)?.padding(in: CGRect(x: 0, y: 0, width: 200, height: 32)) {
+                    let handler = VNImageRequestHandler(ciImage: CIImage(image: croppedImage)!)
+                    do {
+                        try handler.perform([self.recognitionRequest])
+                    } catch {
+                        print(error)
+                    }
                 }
             }
         })
@@ -78,7 +84,7 @@ class CanvasView: UIImageView {
             return
         }
         
-        image?.draw(in: bounds)
+        image?.draw(at: .zero)
         updateContext(context: context, touch: touch)
         image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -169,5 +175,23 @@ class CanvasView: UIImageView {
         roiLayer.path = UIBezierPath(rect: CGRect(x: 0, y: 0, width: rect.size.width, height: rect.size.height)).cgPath
         
         layer.addSublayer(roiLayer)
+    }
+    
+    // MARK: Text Recognition
+    lazy var recognitionRequest: VNCoreMLRequest = {
+        do {
+            let model = try VNCoreMLModel(for: _2blocks_coreml_weights().model)
+            return VNCoreMLRequest(model: model, completionHandler: self.handleRecognition)
+        } catch {
+            fatalError("can't load Vision ML model: \(error)")
+        }
+    }()
+    
+    private func handleRecognition(request: VNRequest, error: Error?) {
+        guard let observations = request.results
+            else { fatalError("unexpected result type from VNCoreMLRequest") }
+        let features = observations as! [VNCoreMLFeatureValueObservation]
+        let multiArray = features[0].featureValue.multiArrayValue
+        print("\(multiArray)")
     }
 }

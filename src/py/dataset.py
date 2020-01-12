@@ -23,15 +23,11 @@ def _get_data_generator(label_path: str, image_path: str):
         for _, row in labels.iterrows():
             image_id = row.image_id
             text = [char_map.get(c, 0) for c in row.text]
-            width = row.width
+            # width = row.width
 
             path_str = str(image_path_ / f"{image_id}.png")
             img = cv2.imread(path_str)
-            yield (img, {
-                "width": width,
-                "text": text,
-                "text_length": len(text)
-            })
+            yield (img, {"width": 200, "text": text, "text_length": len(text)})
 
     return generator
 
@@ -52,9 +48,9 @@ def recognition_dataset(batch_size,
         dataset = dataset.shuffle()
     dataset = dataset.padded_batch(
         batch_size,
-        padded_shapes=((32, None, 3), {
+        padded_shapes=((32, 200, 3), {
             "width": (),
-            "text": (None, ),
+            "text": (50, ),
             "text_length": ()
         }))
 

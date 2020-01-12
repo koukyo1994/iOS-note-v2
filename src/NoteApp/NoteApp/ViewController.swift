@@ -23,6 +23,7 @@ class ViewController: UIViewController {
         ruledLineView.frame = getCanvasFrame()
         ruledLineView.isUserInteractionEnabled = false
         ruledLineView.clipsToBounds = true
+        ruledLineView.drawRuledLine()
         view.addSubview(ruledLineView)
         
         // canvas

@@ -27,4 +27,12 @@ extension UIImage {
         
         return UIImage(cgImage: croppedImage, scale: scale, orientation: imageOrientation)
     }
+    
+    func padding(in inRect: CGRect) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(inRect.size, false, 0.0)
+        draw(at: .zero)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
 }
