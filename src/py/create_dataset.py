@@ -111,7 +111,7 @@ if __name__ == "__main__":
         for i in tqdm(range(args.n_samples)):
             try:
                 name = hashlib.md5(str(i).encode("utf-8")).hexdigest()
-                image, text = generate_image(height=32, noise=True)
+                image, text = generate_image(height=32, noise=False)
                 width, height = image.size
 
                 if 32 > width or width > 200:
