@@ -13,7 +13,7 @@ import CoreML
 
 
 class CanvasView: UIImageView {
-    private let baseSize: CGFloat = 5.0
+    private let baseSize: CGFloat = 2.0
     private var color: UIColor = .black
     
     private var ruledLineHeight: CGFloat = 30.0
@@ -60,13 +60,15 @@ class CanvasView: UIImageView {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+        DispatchQueue.main.async(execute: {
             if let rect = self.getBoundingBox(
                 self.collectRegionOfInterest()) {
                 self.displayRegionOfInterest(rect: rect)
                 
-                if let croppedImage = self.image?.cropRect(rect: rect)?.padding(in: CGRect(x: 0, y: 0, width: 200, height: 32)) {
-                    let handler = VNImageRequestHandler(ciImage: CIImage(image: croppedImage)!)
+                if let croppedImage = self.image?.cropRect(rect: rect)?.resize(height: 32)?.padding(in: CGRect(x: 0, y: 0, width: 200, height: 32)) {
+                    // UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil)
+                    let ciImage = CIImage(image: croppedImage)
+                    let handler = VNImageRequestHandler(ciImage: ciImage!)
                     do {
                         try handler.perform([self.recognitionRequest])
                     } catch {
@@ -194,11 +196,16 @@ class CanvasView: UIImageView {
 
         do {
             let multiArray = try features[0].featureValue.multiArrayValue!.reshaped(to: [50, 91])
+            var argMaxArray = [Int]()
+
             for i in 0..<50 {
                 let sliced = multiArray.slice([.select(i), .slice])
                 let pointer = UnsafeMutablePointer<Double>(OpaquePointer(sliced.dataPointer))
-                print(sum(pointer, count: 91))
+                let (argMax, _) = argmax(pointer, count: 91)
+                argMaxArray.append(argMax)
             }
+            let subArray = argMaxArray.prefix(upTo: 30)
+            print(decode(Array(subArray), max: 90))
         } catch {
             print(error)
             return

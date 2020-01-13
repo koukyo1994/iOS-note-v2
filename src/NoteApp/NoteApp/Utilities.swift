@@ -16,3 +16,5 @@ func distance(_ point1: CGPoint, _ point2: CGPoint) -> Double {
     
     return sqrt(xdist * xdist + ydist * ydist)
 }
+
+
