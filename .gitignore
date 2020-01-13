@@ -205,6 +205,7 @@ dmypy.json
 # dataset
 *.png
 *.jpg
+*.json
 
 # binary
 *.h5
