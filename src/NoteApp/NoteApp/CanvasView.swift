@@ -25,6 +25,9 @@ class CanvasView: UIImageView {
     private let roiThreshold = 0.5
     private let distanceThreshold = 20.0
     
+    public var inverseIndex: [String: [Int]]!
+    public var wordList: [String]!
+    
     // MARK: UITouch Overriding
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
@@ -210,5 +213,16 @@ class CanvasView: UIImageView {
             print(error)
             return
         }
+    }
+    
+    // MARK: AutoComplete
+    private func getWordCandidate(observation: String) -> [String] {
+        var candidateWords = [String]()
+        if let candidateIndex = inverseIndex[observation] {
+            _ = candidateIndex.map {
+                candidateWords.append(wordList[$0])
+            }
+        }
+        return candidateWords
     }
 }

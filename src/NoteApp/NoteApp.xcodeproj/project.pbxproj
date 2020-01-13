@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EC2F4E3123CCCC2C00EA7B44 /* index.json in Resources */ = {isa = PBXBuildFile; fileRef = EC2F4E3023CCCC2C00EA7B44 /* index.json */; };
+		EC2F4E3323CCCC7F00EA7B44 /* AutoCompletionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2F4E3223CCCC7F00EA7B44 /* AutoCompletionUtils.swift */; };
+		EC2F4E3523CCD77C00EA7B44 /* words.txt in Resources */ = {isa = PBXBuildFile; fileRef = EC2F4E3423CCD77C00EA7B44 /* words.txt */; };
 		EC55FDD523CBF76D0048EE39 /* 3blocks_coreml_weights.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = EC55FDD423CBF76D0048EE39 /* 3blocks_coreml_weights.mlmodel */; };
 		EC7549DE23CB8D65000F33D1 /* MLMultiArray+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7549DD23CB8D65000F33D1 /* MLMultiArray+Extension.swift */; };
 		EC7549E023CB9304000F33D1 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7549DF23CB9303000F33D1 /* Math.swift */; };
@@ -24,6 +27,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EC2F4E3023CCCC2C00EA7B44 /* index.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = index.json; path = ../../py/data/index.json; sourceTree = "<group>"; };
+		EC2F4E3223CCCC7F00EA7B44 /* AutoCompletionUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletionUtils.swift; sourceTree = "<group>"; };
+		EC2F4E3423CCD77C00EA7B44 /* words.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = words.txt; path = ../../py/data/words.txt; sourceTree = "<group>"; };
 		EC55FDD423CBF76D0048EE39 /* 3blocks_coreml_weights.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = 3blocks_coreml_weights.mlmodel; path = ../../py/bin/3blocks_coreml_weights.mlmodel; sourceTree = "<group>"; };
 		EC7549DD23CB8D65000F33D1 /* MLMultiArray+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MLMultiArray+Extension.swift"; sourceTree = "<group>"; };
 		EC7549DF23CB9303000F33D1 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
@@ -72,6 +78,8 @@
 		ECD360DE23C7BA3900686CD2 /* NoteApp */ = {
 			isa = PBXGroup;
 			children = (
+				EC2F4E3423CCD77C00EA7B44 /* words.txt */,
+				EC2F4E3023CCCC2C00EA7B44 /* index.json */,
 				EC55FDD423CBF76D0048EE39 /* 3blocks_coreml_weights.mlmodel */,
 				ECD360DF23C7BA3900686CD2 /* AppDelegate.swift */,
 				ECD360E123C7BA3900686CD2 /* SceneDelegate.swift */,
@@ -87,6 +95,7 @@
 				ECD360E823C7BA3D00686CD2 /* Assets.xcassets */,
 				ECD360EA23C7BA3D00686CD2 /* LaunchScreen.storyboard */,
 				ECD360ED23C7BA3D00686CD2 /* Info.plist */,
+				EC2F4E3223CCCC7F00EA7B44 /* AutoCompletionUtils.swift */,
 			);
 			path = NoteApp;
 			sourceTree = "<group>";
@@ -151,6 +160,8 @@
 			files = (
 				ECD360EC23C7BA3D00686CD2 /* LaunchScreen.storyboard in Resources */,
 				ECD360E923C7BA3D00686CD2 /* Assets.xcassets in Resources */,
+				EC2F4E3123CCCC2C00EA7B44 /* index.json in Resources */,
+				EC2F4E3523CCD77C00EA7B44 /* words.txt in Resources */,
 				ECD360E723C7BA3900686CD2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -170,6 +181,7 @@
 				ECD360E023C7BA3900686CD2 /* AppDelegate.swift in Sources */,
 				EC7549E223CBD837000F33D1 /* CTCDecode.swift in Sources */,
 				ECD360E223C7BA3900686CD2 /* SceneDelegate.swift in Sources */,
+				EC2F4E3323CCCC7F00EA7B44 /* AutoCompletionUtils.swift in Sources */,
 				EC55FDD523CBF76D0048EE39 /* 3blocks_coreml_weights.mlmodel in Sources */,
 				ECD360F423C7BAA200686CD2 /* UIImage+Extension.swift in Sources */,
 				EC7549E023CB9304000F33D1 /* Math.swift in Sources */,

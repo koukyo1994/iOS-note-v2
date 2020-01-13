@@ -17,6 +17,23 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // read json
+        do {
+            if let jsonData = try readJson() {
+                canvasView.inverseIndex = try jsonToDict(jsonData: jsonData)
+            }
+        } catch {
+            fatalError("Can't load inverse index.")
+        }
+        
+        // read word
+        do {
+            if let wordList = try readTxt() {
+                canvasView.wordList = wordList
+            }
+        } catch {
+            fatalError("Can't load word list.")
+        }
         
         // background
         ruledLineView.backgroundColor = .white
