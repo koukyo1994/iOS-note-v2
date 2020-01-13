@@ -25,6 +25,13 @@ FONTNAMES += CUSTOMFONTS
 
 with open("/usr/share/dict/words") as f:
     WORDS = f.read().splitlines()
+    WORDS += [
+        "#", "##", "###", "####", "#####",
+        "?", "$", "+", "-", "/", "!", "%",
+        "&", "(", ")", "*", "@", "[", "]",
+        "^", "_", "~"
+    ]
+    WORDS += [str(i) for i in range(10000)]
 
 AUGMENTOR = iaa.Sequential([
     iaa.OneOf([iaa.GaussianBlur(
