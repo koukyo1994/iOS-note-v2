@@ -24,6 +24,9 @@ func decode(_ prediction: [Int], max: Int) -> String {
         if p == previous {
             continue
         }
+        if p == 0 {
+            continue
+        }
         let index = CHARS.index(characterIndex, offsetBy: p - 1)
         decodedArray.append(CHARS[index])
         previous = p
