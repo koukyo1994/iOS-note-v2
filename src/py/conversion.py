@@ -3,8 +3,6 @@ import tensorflow as tf
 
 import utils
 
-from coremltools.models.neural_network import flexible_shape_utils as flex
-
 from dataset import CHARS
 from model import get_model
 
@@ -35,20 +33,10 @@ if __name__ == "__main__":
         green_bias=-1.0,
         is_bgr=True,
         minimum_ios_deployment_target="13")
+
     coremlmodel.save(config["mlmodel_path"])
 
-    spec = coremltools.utils.load_spec(config["mlmodel_path"])
-
-    img_size_range = flex.NeuralNetworkImageSizeRange()
-    img_size_range.add_height_range((32, 32))
-    img_size_range.add_width_range((32, 200))
-
-    output_shape_range = flex.NeuralNetworkMultiArrayShapeRange()
-    output_shape_range.add_channel_range((1, 1))
-    output_shape_range.add_width_range((91, 91))
-    output_shape_range.add_height_range((8, 50))
-    flex.update_image_size_range(
-        spec, feature_name=input_name, size_range=img_size_range)
-    flex.update_multiarray_shape_range(
-        spec, feature_name="Identity", shape_range=output_shape_range)
-    coremltools.utils.save_spec(spec, config["mlmodel_path"])
+    spec = coremlmodel.get_spec()
+    spec_fp16 = coremltools.utils.convert_neural_network_spec_weights_to_fp16(
+        spec)
+    coremltools.utils.save_spec(spec_fp16, config["mlmodel_path"])

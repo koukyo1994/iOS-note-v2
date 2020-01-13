@@ -13,7 +13,7 @@ from model import get_model
 def predict_text(image: np.ndarray, model: tf.keras.Model) -> str:
     height = image.shape[0]
     image = cv2.resize(image, (int(image.shape[1] / height * 32), 32))
-    padded = np.zeros(32, 200, 3)
+    padded = np.zeros((32, 200, 3))
     padded[:, :image.shape[1], :] = image
     input = (padded.astype(np.float32) / 127.5 - 1.0)[np.newaxis, :, :, :]
     pred = model.predict(input)
