@@ -85,7 +85,7 @@ def generate_image(height: int,
     if noise:
         img = AUGMENTOR.augment_image(np.asarray(image))
         image = Image.fromarray(img)
-        image = image.resize((width // 2, height))
+    image = image.resize((width // 2, height))
     return image, text
 
 

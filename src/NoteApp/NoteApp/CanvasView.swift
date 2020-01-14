@@ -208,7 +208,9 @@ class CanvasView: UIImageView {
                 argMaxArray.append(argMax)
             }
             let subArray = argMaxArray.prefix(upTo: 30)
-            print(decode(Array(subArray), max: 90))
+            let decoded = decode(Array(subArray), max: 90)
+            print(decoded)
+            print(getWordCandidate(observation: decoded))
         } catch {
             print(error)
             return

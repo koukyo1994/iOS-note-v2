@@ -18,7 +18,7 @@ if __name__ == "__main__":
     model = coremltools.models.MLModel(config["mlmodel_path"], useCPUOnly=True)
 
     labels = pd.read_csv("data/labels.csv")
-    image = cv2.imread(f"data/images/{labels.loc[0, 'image_id']}.png")
+    image = cv2.imread(f"data/images/{labels.loc[1, 'image_id']}.png")
 
     new_image = np.ones((32, 200, 3), dtype=np.uint8) * 255
     width = image.shape[1]
@@ -30,5 +30,5 @@ if __name__ == "__main__":
     text = "".join((CHARS[idx - 1] for idx in decoded[0][0].numpy()))
 
     plt.imshow(new_image)
-    plt.title(f"Answer: {labels.loc[0, 'text']}, Pred: {text}")
+    plt.title(f"Answer: {labels.loc[1, 'text']}, Pred: {text}")
     plt.show()
