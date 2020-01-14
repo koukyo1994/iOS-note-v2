@@ -185,7 +185,7 @@ class CanvasView: UIImageView {
     // MARK: Text Recognition
     lazy var recognitionRequest: VNCoreMLRequest = {
         do {
-            let model = try VNCoreMLModel(for: _3blocks_coreml_weights().model)
+            let model = try VNCoreMLModel(for: CTCModel().model)
             return VNCoreMLRequest(model: model, completionHandler: self.handleRecognition)
         } catch {
             fatalError("can't load Vision ML model: \(error)")
