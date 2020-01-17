@@ -4,6 +4,7 @@ import tensorflow as tf
 
 import utils
 
+from create_dataset import TextBox
 from dataset import segmentation_dataset
 from loss import segmentation_loss
 from model import get_character_segmentation_model

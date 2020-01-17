@@ -211,6 +211,7 @@ def get_character_segmentation_model(input_shape=(32, 224, 3), filters=9):
     x = _fuse_features(filters, x, mobilenetv2.get_layer(index=-125).output)
     x = _fuse_features(filters, x, mobilenetv2.get_layer(index=-145).output)
     x = L.UpSampling2D()(x)
+    x = L.Lambda(lambda fm: tf.squeeze(fm, axis=3))(x)
     scores = L.Activation("sigmoid", name="score")(x)
     return tf.keras.Model(inputs, scores)
 
