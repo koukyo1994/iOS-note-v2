@@ -1,0 +1,18 @@
+{
+    "task": "segmentation",
+    "dataset": {
+        "label_path": "data/labels_charbox.csv",
+        "image_path": "data/char_images",
+        "boxes_path": "data/char_boxes"
+    },
+    "model": {
+        "filters": 1
+    },
+    "training": {
+        "n_epochs": 50,
+        "batch_size": 32,
+        "lr": 5e-5
+    },
+    "save_path": "bin/SegmentationModel.h5",
+    "mlmodel_path": "bin/SegmentationModel.mlmodel"
+}

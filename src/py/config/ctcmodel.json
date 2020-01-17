@@ -1,0 +1,16 @@
+{
+    "dataset": {
+        "label_path": "data/labels.csv",
+        "image_path": "data/images"
+    },
+    "model": {
+        "n_blocks": 3
+    },
+    "training": {
+        "n_epochs": 50,
+        "batch_size": 32,
+        "lr": 5e-5
+    },
+    "save_path": "bin/CTCModel.h5",
+    "mlmodel_path": "bin/CTCModel.mlmodel"
+}

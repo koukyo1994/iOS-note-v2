@@ -151,6 +151,70 @@ def get_model(input_shape, n_vocab, n_blocks=3):
     return tf.keras.Model(input, x)
 
 
+def get_recurrent_model(input_shape, n_vocab, n_blocks=3):
+    height = input_shape[0]
+    input = tf.keras.layers.Input(shape=input_shape)
+    x = _conv_bn_relu(input, filters=64, kernel_size=(7, 7), strides=(2, 2))
+    x = L.MaxPooling2D(pool_size=(3, 3), strides=(2, 2), padding="same")(x)
+    x = _residual_block(
+        x,
+        128,
+        stage=1,
+        blocks=2,
+        is_first_layer=True,
+        transition_strides=[(1, 1), (1, 1)],
+        transition_dilation_rates=[1, 1])
+    current_height = height // 4
+    last_block = n_blocks - 1
+    for i in range(n_blocks):
+        if i == last_block:
+            stride = current_height
+        else:
+            stride = 2
+
+        x = _residual_block(
+            x,
+            128 * (i + 2),
+            blocks=2,
+            is_first_layer=False,
+            stage=i + 2,
+            transition_dilation_rates=[1, 1],
+            transition_strides=[(stride, 1), (1, 1)])
+        current_height = current_height // stride
+
+    x = L.Lambda(lambda fm: tf.squeeze(fm, axis=1))(x)
+    x = L.LSTM(n_vocab + 1, activation="softmax", return_state=True)(x)
+    return tf.keras.Model(input, x)
+
+
+def _fuse_features(filters, x1, x2, upsample=True):
+    # type: (int, tf.Tensor, tf.Tensor, bool) -> tf.Tensor
+    if upsample:
+        x1 = L.UpSampling2D()(x1)
+    else:
+        x1 = L.Conv2D(filters, 1)(x1)
+    x2 = L.Conv2D(filters, 1)(x2)
+    return L.add([x1, x2])
+
+
+def get_character_segmentation_model(input_shape=(32, 224, 3), filters=9):
+    mobilenetv2 = tf.keras.applications.MobileNetV2(
+        input_shape=input_shape, include_top=False, weights=None)
+    inputs = mobilenetv2.input
+    x = _fuse_features(
+        filters,
+        mobilenetv2.output,
+        mobilenetv2.get_layer(index=-12).output,
+        upsample=False)
+    x = _fuse_features(filters, x, mobilenetv2.get_layer(index=-36).output)
+    x = _fuse_features(filters, x, mobilenetv2.get_layer(index=-101).output)
+    x = _fuse_features(filters, x, mobilenetv2.get_layer(index=-125).output)
+    x = _fuse_features(filters, x, mobilenetv2.get_layer(index=-145).output)
+    x = L.UpSampling2D()(x)
+    scores = L.Activation("sigmoid", name="score")(x)
+    return tf.keras.Model(inputs, scores)
+
+
 if __name__ == "__main__":
     from dataset import CHARS
 

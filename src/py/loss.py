@@ -12,3 +12,11 @@ def recognition_loss(y_pred, y_true, input_width, text_length):
                                            pred_length[..., tf.newaxis],
                                            text_length[..., tf.newaxis])
     return tf.reduce_mean(cost)
+
+
+@tf.function(
+    input_signature=(tf.TensorSpec(shape=(32, 224, 3), dtype=tf.float32),
+                     tf.TensorSpec(shape=(32, 224), dtype=tf.int32)))
+def segmentation_loss(y_pred, y_true):
+    cost = tf.losses.binary_crossentropy(y_true, y_pred)
+    return tf.reduce_mean(cost)
