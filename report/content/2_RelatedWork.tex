@@ -17,7 +17,10 @@ Object detection methods after the emergence of Object detection methods are
 \subsection{Recognition}
 
 Some text recognition algorithms devide the task into character segmentation and character recognition~\cite{bissacco2013photoocr}\cite{phan2011gradient}.
-character segmentation is not currently widely used
-since it can be a cause of errors when separating connected characters such as cursive,
-but there is also a merit that it is only necessary to use a simpler character recognition method
-instead of text recognition in the subsequent processing.
+Character segmentation is considered as the most challenging part of scene text recognition, and may affect
+overall accuracy. It is especially difficult to segment connected characters such as cursive.
+Therefore some techniques which do not rely on character segmentation have been developped so far.
+This report introduces a method called Connectionist Temporal Classification (CTC)~\cite{graves2006connectionist}.
+
+CTC was first introduced to handle sequence labeling of arbitrary length,
+requiring no pre-segmented training data.

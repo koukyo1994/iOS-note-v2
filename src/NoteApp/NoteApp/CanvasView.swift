@@ -192,6 +192,15 @@ class CanvasView: UIImageView {
         }
     }()
     
+    lazy var segmentationRequest: VNCoreMLRequest = {
+        do {
+            let model = try VNCoreMLModel(for: SegmentationModel().model)
+            return VNCoreMLRequest(model: model, completionHandler: nil)
+        } catch {
+            fatalError("can't load Vision ML model; \(error)")
+        }
+    }()
+    
     private func handleRecognition(request: VNRequest, error: Error?) {
         guard let observations = request.results
             else { fatalError("unexpected result type from VNCoreMLRequest") }
@@ -215,6 +224,15 @@ class CanvasView: UIImageView {
             print(error)
             return
         }
+    }
+    
+    private func handleSegmentation(request: VNRequest, error: Error?) {
+        guard let observations = request.results else {
+            fatalError("unexpected result type from VNCoreMLRequest")
+        }
+        let features = observations as! [VNCoreMLFeatureValueObservation]
+        
+        
     }
     
     // MARK: AutoComplete

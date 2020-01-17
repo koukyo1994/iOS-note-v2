@@ -207,6 +207,7 @@ dmypy.json
 *.jpg
 index.json
 *.pkl
+!report/images/*
 
 # binary
 *.h5

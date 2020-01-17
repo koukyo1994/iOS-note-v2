@@ -9,7 +9,7 @@ from create_dataset import generate_charbox, TextBox
 from model import get_character_segmentation_model
 
 
-def predict(image: np.ndarray, model: tf.keras.Model) -> str:
+def predict(image: np.ndarray, model: tf.keras.Model) -> np.ndarray:
     height = image.shape[0]
     image = cv2.resize(image, (int(image.shape[1] / height * 32), 32))
     padded = np.zeros((32, 224, 3))
@@ -35,10 +35,15 @@ if __name__ == "__main__":
         mask[box.ymin:box.ymax, box.xmin:box.xmax] = 1
 
     pred = predict(img, model)
+    pred = pred[:img.shape[0], :img.shape[1]]
+    pred = (pred > 0.9).astype(np.uint8)
+    plt.figure(figsize=(5, 2))
     plt.imshow(pred)
     plt.savefig(f"data/prediction/pred_box.png")
+    plt.figure(figsize=(5, 2))
     plt.imshow(img)
     plt.savefig(f"data/prediction/original.png")
+    plt.figure(figsize=(5, 2))
     plt.imshow(mask)
     plt.title(f"n characters: {len(boxes)}")
     plt.savefig(f"data/prediction/mask.png")

@@ -14,6 +14,7 @@
 		EC7549DE23CB8D65000F33D1 /* MLMultiArray+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7549DD23CB8D65000F33D1 /* MLMultiArray+Extension.swift */; };
 		EC7549E023CB9304000F33D1 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7549DF23CB9303000F33D1 /* Math.swift */; };
 		EC7549E223CBD837000F33D1 /* CTCDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7549E123CBD837000F33D1 /* CTCDecode.swift */; };
+		EC9A596923D223B500A8277F /* SegmentationModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = EC9A596823D223B500A8277F /* SegmentationModel.mlmodel */; };
 		ECD360E023C7BA3900686CD2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD360DF23C7BA3900686CD2 /* AppDelegate.swift */; };
 		ECD360E223C7BA3900686CD2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD360E123C7BA3900686CD2 /* SceneDelegate.swift */; };
 		ECD360E423C7BA3900686CD2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD360E323C7BA3900686CD2 /* ViewController.swift */; };
@@ -34,6 +35,7 @@
 		EC7549DD23CB8D65000F33D1 /* MLMultiArray+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MLMultiArray+Extension.swift"; sourceTree = "<group>"; };
 		EC7549DF23CB9303000F33D1 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		EC7549E123CBD837000F33D1 /* CTCDecode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTCDecode.swift; sourceTree = "<group>"; };
+		EC9A596823D223B500A8277F /* SegmentationModel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = SegmentationModel.mlmodel; path = ../../py/bin/SegmentationModel.mlmodel; sourceTree = "<group>"; };
 		ECD360DC23C7BA3900686CD2 /* NoteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NoteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECD360DF23C7BA3900686CD2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ECD360E123C7BA3900686CD2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 		ECD360DE23C7BA3900686CD2 /* NoteApp */ = {
 			isa = PBXGroup;
 			children = (
+				EC9A596823D223B500A8277F /* SegmentationModel.mlmodel */,
 				EC2F4E3623CD4B4400EA7B44 /* CTCModel.mlmodel */,
 				EC2F4E3423CCD77C00EA7B44 /* words.txt */,
 				EC2F4E3023CCCC2C00EA7B44 /* index.json */,
@@ -181,6 +184,7 @@
 				ECD360E023C7BA3900686CD2 /* AppDelegate.swift in Sources */,
 				EC7549E223CBD837000F33D1 /* CTCDecode.swift in Sources */,
 				EC2F4E3723CD4B4400EA7B44 /* CTCModel.mlmodel in Sources */,
+				EC9A596923D223B500A8277F /* SegmentationModel.mlmodel in Sources */,
 				ECD360E223C7BA3900686CD2 /* SceneDelegate.swift in Sources */,
 				EC2F4E3323CCCC7F00EA7B44 /* AutoCompletionUtils.swift in Sources */,
 				ECD360F423C7BAA200686CD2 /* UIImage+Extension.swift in Sources */,
