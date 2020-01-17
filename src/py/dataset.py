@@ -88,7 +88,7 @@ def _char_segmentation_data_generator_fn(label_path: str, image_path: str,
 
             mask = np.zeros((img.shape[0], img.shape[1]), dtype=np.uint8)
             for box in boxes:
-                mask[box.xmin:box.xmax, box.ymin:box.ymax] = 1
+                mask[box.ymin:box.ymax, box.xmin:box.xmax] = 1
 
             yield img, mask
 

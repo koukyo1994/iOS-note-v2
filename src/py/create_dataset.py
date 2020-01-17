@@ -113,7 +113,7 @@ def generate_charbox(height: int, padding: int = 2,
         if max_char_height > height * 2:
             raise ValueError(
                 f"Given height is not enough for the fontsize {font.size}")
-    width = sum(char_widths) + padding * len(char_widths)
+    width = sum(char_widths) + padding * len(char_widths) + 15
     x = np.random.randint(0, 10)
     y = np.random.randint(0, height * 2 - max_char_height)
 
@@ -125,11 +125,11 @@ def generate_charbox(height: int, padding: int = 2,
         char_boxes.append(
             TextBox(
                 text=char,
-                xmin=x,
-                xmax=x + char_widths[i],
-                ymin=y,
-                ymax=y + char_heights[i]))
-        x = x + char_widths[i] + np.random.randint(0, padding)
+                xmin=x // 2,
+                xmax=(x + char_widths[i]) // 2,
+                ymin=y // 2,
+                ymax=(y + char_heights[i]) // 2))
+        x = x + char_widths[i] + padding
         y = np.random.randint(0, height * 2 - max_char_height)
 
     if noise:
@@ -208,7 +208,7 @@ if __name__ == "__main__":
             for i in tqdm(range(args.n_samples)):
                 try:
                     name = hashlib.md5(str(i).encode("utf-8")).hexdigest()
-                    image, boxes = generate_charbox(height=32, noise=False)
+                    image, boxes = generate_charbox(height=32, noise=False, padding=4)
                     width, height = image.size
 
                     if 32 > width or width > 200:
