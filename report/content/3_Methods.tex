@@ -64,6 +64,8 @@ and in recent years its effectiveness in CTC is sometimes questioned~\cite{puigc
 Given that all calculations are done on iOS, and based on research that the
 output layer of the CTC model can also be configured using CNN~\cite{gao2017reading}, in this report
 a model which is fully constructed only by CNN was used for CTC model.
+To get an approximation for most probable labeling, greedy policy, the policy to take the
+most probable label at each time step, was used.
 
 \subsubsection{Character Segmentation}
 
@@ -106,4 +108,15 @@ Figure \ref{fig:generated_image} shows an example of training data generated wit
 
 \subsection{Implementation}
 
+I used Python3.6\footnote{https://www.python.org/downloads/release/python-360/} and
+TensorFlow2.1\footnote{https://www.tensorflow.org/} for building machine learning
+models and training, and used coremltools3.2\footnote{https://apple.github.io/coremltools/}
+to convert the models into the format that can work on iOS.
 
+To get handwritten document image from the iOS electronic tablet, a function to print
+the input from the Apple Pencil\footnote{https://www.apple.com/apple-pencil/} on the white canvas
+according to the path of the pen has been implemented.
+
+For training the model, Google Colaboratory environment
+\footnote{https://colab.research.google.com/notebooks/welcome.ipynb} has been used.
+All the implementation is published\footnote{https://github.com/koukyo1994/iOS-note-v2}.
