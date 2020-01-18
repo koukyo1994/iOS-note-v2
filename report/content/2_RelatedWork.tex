@@ -23,4 +23,65 @@ Therefore some techniques which do not rely on character segmentation have been 
 This report introduces a method called Connectionist Temporal Classification (CTC)~\cite{graves2006connectionist}.
 
 CTC was first introduced to handle sequence labeling of arbitrary length,
-requiring no pre-segmented training data.
+requiring no pre-segmented training data. A CTC network outputs probabilities for each label
+at each time step. Time step length can be any length longer than label length.
+The output at each time step is the probability of the classess to be recognized plus
+the extra class representing "blank". Let this output probabilities be
+$\mathbf{y}=(y_1, y_2, \cdots, y_w)$ and denote by $y_{\pi_t}^{t}$ the activation of
+label $\pi_t$ at time step $t$. Given this probability distribution, the conditional
+probability of the sequence is calculated as follows.
+
+\begin{equation}
+    p(\pi |\mathbf{y}) = \prod_{t=1}^{w}y_{\pi_t}^{t}
+\end{equation}
+
+Then a many-to-one mapping $\mathcal{B}$ is defined to transform the sequence
+$\pi$ to a shorter sequence. The final predicted label is obtained by this mapping.
+This mapping removes all blanks and repeated continuous labels from the sequence.
+For example, $\mathcal{B}$ maps the predicted sequence "aa-p-pl----ee" to "apple",
+where "-" represents the "blank". Since this mapping is many-to-one mapping, different
+sequences may be mapped to the same sequence. Therefore the probability of the final
+output sequence is the sum of all possible conditional probabilities of all $\pi$ corresponding
+to that final sequence.
+
+\begin{equation}
+    p(l|\mathbf{y}) = \sum_{\mathbf{\pi}} p(\pi | \mathbf{y})
+\end{equation}
+
+where $\mathbf{\pi}$ represents all $\pi$ which produces $l = \mathcal{B}(\pi)$.
+
+The output of the classifier should be the most probable labeling for the input sequence.
+
+\begin{equation}
+    h(\mathbf{y}) = \arg\max p(l|\mathbf{y})
+\end{equation}
+
+In general, there are a large number of mapping paths for a give sequence, thus
+calculation of $\arg\max$ requires heavy computation. In practice, following two approximate
+methods are known to give us a good result.
+
+The first method is based on the assumption that the most probable path can be approximated
+by the sequence of most probable labeling
+
+\begin{equation}
+    h(\mathbf{y})\approx\mathcal{B}(\pi^*)
+\end{equation}
+
+where $\pi^{*}$ is a set of labels which get the highest probabilities at each time step.
+Although it works well, it is not guaranteed to get the most probable labeling.
+
+The second method is to use forward-backward algorithm to efficiently search for the most
+probable sequence. With enough time, this approach can always find the most probable labeling
+from the input sequence, but the amount of computation increases exponentially with respect to
+the sequence length, it is not practical to find the exact solution.
+
+To train the network with the dataset $\mathcal{D} = \{I_i, l_i\}$, where $I_i$ represents
+the input image and $l_i$ represents the corresponding label, maximum likelihood approach
+it utilized. The objective function of this can be negative log-likelihood
+
+\begin{equation}
+    \mathcal{O} = -\sum_{(I_i, l_i)\in\mathcal{D}} \log p(l_i|\mathbf{y}_i)
+\end{equation}
+
+where $\mathbf{y}_i = f(I_i)$ and $f(\cdot)$ represents the classifier. To minimize negative
+log-likelihood, Stochastic Gradient Descent (SGD) can be used.
