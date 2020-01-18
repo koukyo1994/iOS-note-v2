@@ -19,6 +19,36 @@ Character Segmentation and Character Recognition were verified.
 
 \subsection{Region of Interest Detection}
 
+The purpose of region-of-interest detection is to cut out sub-sequence
+representing words and illustrations from the dot sequence of the pen tip trajectory
+and cut back the data to be passed to the subsequent processing to
+reduce the amount of calculation and improve the recognition accuracy.
+Region of interest is a region including a dot sequence of the word or the illustration.
+To specify the region, two assumptions are made on region of interest.
+
+\begin{enumerate}
+    \item Objects drawn in the region of interest are close in time when drawn
+    \item Objects drawn in the region of interest are spatially close
+\end{enumerate}
+
+Based on these assumptions, region of interest is successfully detected.
+Figure \ref{fig:region_of_interest} shows an example of the region detected with
+this heuristic.
+
+There are some cases where such heuristics do not work. For example, when the scale of
+the depicted object is large, the gap between the sequence of points
+constituting the object may be too large and fail.It is also a major problem that
+temporal and spatial proximity depends on parameters and sometimes does not match intuition.
+However, it is certain that this method can narrow down the target area for text recognition
+with a very small amount of computation, so this report adopted this method.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{images/region_of_interest.png}
+    \caption{The region with yellow overlay is detected region of interest}
+    \label{fig:region_of_interest}
+\end{figure}
+
 \subsection{Recognition}
 
 In text recognition, two models were tried: a model that directly reads the content from the
@@ -27,7 +57,20 @@ Character Segmentation and Character Recognition were connected in series.
 
 \subsubsection{CTC}
 
+CTC models are usually constructed using CNN model with Recurrent Neural Network (RNN)
+as the output layer.
+However, RNN performs computations slowly compared to CNN,
+and in recent years its effectiveness in CTC is sometimes questioned~\cite{puigcerver2017multidimensional}.
+Given that all calculations are done on iOS, and based on research that the
+output layer of the CTC model can also be configured using CNN~\cite{gao2017reading}, in this report
+a model which is fully constructed only by CNN was used for CTC model.
+
 \subsubsection{Character Segmentation}
+
+The target environment of this report is on an electronic tablet,
+and since it does not have a complicated background,
+a model designed with a Unet-like~\cite{ronneberger2015unet} architecture based on MobilenetV2\cite{s2018mobilenetv2} was
+used for character segmentation with emphasis on speed and simplicity of the model.
 
 \subsubsection{Character Recognition}
 
@@ -36,6 +79,10 @@ a simple neural network model is used. Therefore, a small CNN model was designed
 in consideration of the amount of calculation.
 
 \subsection{Auto-Complete}
+
+In this report, I deal with auto-completion as an application of the inference result.
+This auto-completion emphasizes simplicity and presents words
+that start with infered result in order of frequency.
 
 \subsection{Dataset}
 
