@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EC2B9F9E23D50214003455C5 /* CTCModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = EC2B9F9D23D50214003455C5 /* CTCModel.mlmodel */; };
 		EC2F4E3323CCCC7F00EA7B44 /* AutoCompletionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2F4E3223CCCC7F00EA7B44 /* AutoCompletionUtils.swift */; };
 		EC2F4E3523CCD77C00EA7B44 /* words.txt in Resources */ = {isa = PBXBuildFile; fileRef = EC2F4E3423CCD77C00EA7B44 /* words.txt */; };
-		EC2F4E3723CD4B4400EA7B44 /* CTCModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = EC2F4E3623CD4B4400EA7B44 /* CTCModel.mlmodel */; };
 		EC7549DE23CB8D65000F33D1 /* MLMultiArray+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7549DD23CB8D65000F33D1 /* MLMultiArray+Extension.swift */; };
 		EC7549E023CB9304000F33D1 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7549DF23CB9303000F33D1 /* Math.swift */; };
 		EC7549E223CBD837000F33D1 /* CTCDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7549E123CBD837000F33D1 /* CTCDecode.swift */; };
@@ -27,9 +27,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EC2B9F9D23D50214003455C5 /* CTCModel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = CTCModel.mlmodel; sourceTree = "<group>"; };
 		EC2F4E3223CCCC7F00EA7B44 /* AutoCompletionUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompletionUtils.swift; sourceTree = "<group>"; };
 		EC2F4E3423CCD77C00EA7B44 /* words.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = words.txt; path = ../../py/data/words.txt; sourceTree = "<group>"; };
-		EC2F4E3623CD4B4400EA7B44 /* CTCModel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = CTCModel.mlmodel; path = ../../py/bin/CTCModel.mlmodel; sourceTree = "<group>"; };
 		EC7549DD23CB8D65000F33D1 /* MLMultiArray+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MLMultiArray+Extension.swift"; sourceTree = "<group>"; };
 		EC7549DF23CB9303000F33D1 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		EC7549E123CBD837000F33D1 /* CTCDecode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTCDecode.swift; sourceTree = "<group>"; };
@@ -78,8 +78,8 @@
 		ECD360DE23C7BA3900686CD2 /* NoteApp */ = {
 			isa = PBXGroup;
 			children = (
+				EC2B9F9D23D50214003455C5 /* CTCModel.mlmodel */,
 				EC7EB76423D487F1008C40A4 /* index.json */,
-				EC2F4E3623CD4B4400EA7B44 /* CTCModel.mlmodel */,
 				EC2F4E3423CCD77C00EA7B44 /* words.txt */,
 				ECD360DF23C7BA3900686CD2 /* AppDelegate.swift */,
 				ECD360E123C7BA3900686CD2 /* SceneDelegate.swift */,
@@ -180,7 +180,7 @@
 				EC7549DE23CB8D65000F33D1 /* MLMultiArray+Extension.swift in Sources */,
 				ECD360E023C7BA3900686CD2 /* AppDelegate.swift in Sources */,
 				EC7549E223CBD837000F33D1 /* CTCDecode.swift in Sources */,
-				EC2F4E3723CD4B4400EA7B44 /* CTCModel.mlmodel in Sources */,
+				EC2B9F9E23D50214003455C5 /* CTCModel.mlmodel in Sources */,
 				ECD360E223C7BA3900686CD2 /* SceneDelegate.swift in Sources */,
 				EC2F4E3323CCCC7F00EA7B44 /* AutoCompletionUtils.swift in Sources */,
 				ECD360F423C7BAA200686CD2 /* UIImage+Extension.swift in Sources */,

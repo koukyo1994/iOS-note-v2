@@ -32,10 +32,21 @@ class CanvasView: UIImageView {
     public var detectWithCoreML = true
     private var cumulativeTime = 0.0
     
+    public var allowFingerDrawing = true
+
+    private func touchType() -> UITouch.TouchType {
+        var touchType = UITouch.TouchType.stylus
+        if allowFingerDrawing {
+            touchType = .direct
+        }
+        return touchType
+    }
+    
     // MARK: UITouch Overriding
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
-        if touch.type == UITouch.TouchType.stylus {
+
+        if touch.type == touchType() {
             let point = touch.location(in: self)
             
             let date = Date()
@@ -51,7 +62,7 @@ class CanvasView: UIImageView {
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
-        if touch.type == UITouch.TouchType.stylus {
+        if touch.type == touchType() {
             let point = touch.location(in: self)
             drawLine(touch: touch)
             
@@ -210,7 +221,7 @@ class CanvasView: UIImageView {
     
     lazy var recognitionRequestWithAPI: VNRecognizeTextRequest = {
         let request = VNRecognizeTextRequest(completionHandler: self.handleRecognitionUsingAPI)
-        request.recognitionLevel = .fast
+        request.recognitionLevel = .accurate
         request.recognitionLanguages = ["en_US"]
         request.usesLanguageCorrection = false
         return request

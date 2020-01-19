@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    private let navBarCoefficient: CGFloat = 0.02
+    private let navBarCoefficient: CGFloat = 0.1
     
     let canvasView = CanvasView()
     let ruledLineView = UIImageView()
@@ -57,7 +57,9 @@ class ViewController: UIViewController {
         let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height * navBarCoefficient))
         let navItem = UINavigationItem(title: "Navigation Area")
         let barButton = UIBarButtonItem(title: "clear", style: .plain, target: self, action: #selector(self.clear))
-        navItem.rightBarButtonItem = barButton
+        let fingerStylusSwitchButton = UIBarButtonItem(title: "Finger", style: .plain, target: self, action: #selector(self.switchTouchType))
+        let modelChangeButton = UIBarButtonItem(title: "CTCModel", style: .plain, target: self, action: #selector(self.changeModel))
+        navItem.rightBarButtonItems = [barButton, fingerStylusSwitchButton, modelChangeButton]
         navBar.setItems([navItem], animated: false)
         view.addSubview(navBar)
     }
@@ -71,5 +73,14 @@ class ViewController: UIViewController {
         canvasView.clear()
     }
 
+    @objc private func switchTouchType(_ sender: UIBarButtonItem) {
+        canvasView.allowFingerDrawing = !canvasView.allowFingerDrawing
+        sender.title = canvasView.allowFingerDrawing ? "Finger" : "Stylus"
+    }
+    
+    @objc private func changeModel(_ sender: UIBarButtonItem) {
+        canvasView.detectWithCoreML = !canvasView.detectWithCoreML
+        sender.title = canvasView.detectWithCoreML ? "CTCModel": "VNRecognizeText"
+    }
 }
 
