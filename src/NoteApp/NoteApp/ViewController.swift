@@ -70,5 +70,6 @@ class ViewController: UIViewController {
     @objc private func clear(_ sender: UIBarButtonItem) {
         canvasView.clear()
     }
+
 }
 
