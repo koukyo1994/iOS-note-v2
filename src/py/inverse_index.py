@@ -33,8 +33,22 @@ if __name__ == "__main__":
     with open("data/words.txt", "r") as f:
         words = f.read().splitlines()
 
+    with open("data/wordfreq.txt", "r") as f:
+        wordsfreq = [tuple(x.split()) for x in f.read().splitlines()]
+
+    wordsfreq_dict = dict(map(lambda x: (x[0], int(x[1])), wordsfreq))
+    wordsfreq_index_map = {}
+    for i, word in enumerate(words):
+        if wordsfreq_dict.get(word):
+            wordsfreq_index_map[i] = wordsfreq_dict.get(word)
+        else:
+            wordsfreq_index_map[i] = 0
+
     index: Dict[str, List[int]] = {}
     for rng in range(3, 7):
         index = create_inverse_index(words, index, length=rng)
+
+    for key, val in index.items():
+        index[key] = sorted(val, key=lambda x: wordsfreq_index_map[x], reverse=True)
 
     save_json(index, Path("data/index.json"))

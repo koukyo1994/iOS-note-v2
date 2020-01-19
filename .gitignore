@@ -208,6 +208,7 @@ dmypy.json
 index.json
 *.pkl
 !report/images/*
+wordfreq.txt
 
 # binary
 *.h5

@@ -13,7 +13,7 @@ import CoreML
 
 
 class CanvasView: UIImageView {
-    private let baseSize: CGFloat = 2.0
+    private let baseSize: CGFloat = 3.0
     private var color: UIColor = .black
     
     private var ruledLineHeight: CGFloat = 30.0
@@ -22,11 +22,15 @@ class CanvasView: UIImageView {
     private var lastLocation = CGPoint()
     private var touchEvents = [(interval: Double, distance: Double, point: CGPoint)]()
     
-    private let roiThreshold = 0.5
-    private let distanceThreshold = 20.0
+    private let roiThreshold = 1.0
+    private let distanceThreshold = 30.0
+    private var currentROI = CGRect()
     
     public var inverseIndex: [String: [Int]]!
     public var wordList: [String]!
+    
+    public var detectWithCoreML = true
+    private var cumulativeTime = 0.0
     
     // MARK: UITouch Overriding
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -67,16 +71,26 @@ class CanvasView: UIImageView {
             if let rect = self.getBoundingBox(
                 self.collectRegionOfInterest()) {
                 self.displayRegionOfInterest(rect: rect)
-                
+                self.currentROI = rect
                 if let croppedImage = self.image?.cropRect(rect: rect)?.resize(height: 32)?.padding(in: CGRect(x: 0, y: 0, width: 200, height: 32)) {
-                    // UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil)
-                    let ciImage = CIImage(image: croppedImage)
-                    let handler = VNImageRequestHandler(ciImage: ciImage!)
-                    do {
-                        try handler.perform([self.recognitionRequest])
-                    } catch {
-                        print(error)
+
+                    let startTime = Date()
+                    if self.detectWithCoreML {
+                        let ciImage = CIImage(image: croppedImage)
+                        let handler = VNImageRequestHandler(ciImage: ciImage!)
+                        do {
+                            try handler.perform([self.recognitionRequest])
+                        } catch {
+                            print(error)
+                        }
+                    } else {
+                        guard let cgImage = croppedImage.cgImage else {
+                            fatalError("can't create CGImage from UIImage")
+                        }
+                        self.recognitionWithAPI(cgImage)
                     }
+                    self.cumulativeTime += startTime.distance(to: Date())
+                    print("elapsed \(self.cumulativeTime)")
                 }
             }
         })
@@ -123,6 +137,8 @@ class CanvasView: UIImageView {
         layer.sublayers = nil
         setNeedsDisplay()
         layoutIfNeeded()
+        cumulativeTime = 0.0
+        touchEvents = []
     }
     
     // MARK: Region of Interest inference
@@ -192,14 +208,19 @@ class CanvasView: UIImageView {
         }
     }()
     
-    lazy var segmentationRequest: VNCoreMLRequest = {
-        do {
-            let model = try VNCoreMLModel(for: SegmentationModel().model)
-            return VNCoreMLRequest(model: model, completionHandler: nil)
-        } catch {
-            fatalError("can't load Vision ML model; \(error)")
-        }
+    lazy var recognitionRequestWithAPI: VNRecognizeTextRequest = {
+        let request = VNRecognizeTextRequest(completionHandler: self.handleRecognitionUsingAPI)
+        request.recognitionLevel = .fast
+        request.recognitionLanguages = ["en_US"]
+        request.usesLanguageCorrection = false
+        return request
     }()
+    
+    private func recognitionWithAPI(_ image: CGImage) {
+        let requests = [recognitionRequestWithAPI]
+        let imageRequestHandler = VNImageRequestHandler(cgImage: image, options: [:])
+        try! imageRequestHandler.perform(requests)
+    }
     
     private func handleRecognition(request: VNRequest, error: Error?) {
         guard let observations = request.results
@@ -219,20 +240,38 @@ class CanvasView: UIImageView {
             let subArray = argMaxArray.prefix(upTo: 30)
             let decoded = decode(Array(subArray), max: 90)
             print(decoded)
-            print(getWordCandidate(observation: decoded))
+            let candidate = getWordCandidate(observation: decoded)
+            if candidate.count > 0 {
+                if candidate.count > 10 {
+                    print(candidate[..<10])
+                } else {
+                    print(candidate)
+                }
+            }
+            displayAutoComplete(candidateWords: candidate)
         } catch {
             print(error)
-            return
         }
     }
     
-    private func handleSegmentation(request: VNRequest, error: Error?) {
-        guard let observations = request.results else {
-            fatalError("unexpected result type from VNCoreMLRequest")
+    private func handleRecognitionUsingAPI(request: VNRequest?, error: Error?) {
+        guard let observations = request?.results as? [VNRecognizedTextObservation] else {
+            return
         }
-        let features = observations as! [VNCoreMLFeatureValueObservation]
-        
-        
+        if observations.count > 0 {
+            if let inferedText = observations[0].topCandidates(1).first?.string {
+                print(inferedText)
+                let candidate = getWordCandidate(observation: inferedText)
+                if candidate.count > 0 {
+                    if candidate.count > 10 {
+                        print(candidate[..<10])
+                    } else {
+                        print(candidate)
+                    }
+                }
+                displayAutoComplete(candidateWords: candidate)
+            }
+        }
     }
     
     // MARK: AutoComplete
@@ -244,5 +283,19 @@ class CanvasView: UIImageView {
             }
         }
         return candidateWords
+    }
+    
+    private func displayAutoComplete(candidateWords: [String]) {
+        if candidateWords.count > 0 {
+            let charCount = candidateWords[0].count
+            let candidateDisplayLayer = CATextLayer()
+            let rect = CGRect(x: self.currentROI.minX, y: self.currentROI.minY-30, width: CGFloat(charCount * 30), height: 30)
+            candidateDisplayLayer.frame = rect
+            candidateDisplayLayer.font = UIFont(name: "Apple SD Gothic Neo", size: 7)
+            candidateDisplayLayer.foregroundColor = UIColor.gray.cgColor
+            candidateDisplayLayer.string = candidateWords[0]
+            
+            layer.addSublayer(candidateDisplayLayer)
+        }
     }
 }

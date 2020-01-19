@@ -22,7 +22,8 @@ if __name__ == "__main__":
         n_blocks=config["model"]["n_blocks"])
     optimizer = tf.keras.optimizers.Adam(config["training"]["lr"])
     lossess = tf.keras.metrics.Mean(name="recognition/loss")
-    dataset = recognition_dataset(
+    eval_losses = tf.keras.metrics.Mean(name="recognition/eval_loss")
+    train_dataset, test_dataset = recognition_dataset(
         config["training"]["batch_size"],
         label_path=config["dataset"]["label_path"],
         image_path=config["dataset"]["image_path"])
@@ -44,10 +45,20 @@ if __name__ == "__main__":
                 tf.print("Step", optimizer.iterations, ": Loss :",
                          lossess.result())
 
+    def evaluate(dataset):
+        for images, labels in dataset:
+            y_pred = model(images, training=False)
+            loss = recognition_loss(y_pred, labels["text"], labels["width"],
+                                    labels["text_length"])
+            eval_losses(loss)
+
     for epoch in range(config["training"]["n_epochs"]):
         print(f"Epoch {epoch + 1}")
-        train(dataset)
+        train(train_dataset)
         tf.print("Step", optimizer.iterations, ": Loss : ", lossess.result())
+
+        evaluate(test_dataset)
+        tf.print("eval loss: ", eval_losses.result())
 
         print(f"Save weights at epoch: {epoch}")
         model.save(config["save_path"])

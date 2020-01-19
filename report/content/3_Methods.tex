@@ -13,9 +13,7 @@ passed to the subsequent processing and suppress the increase in the amount of c
 In general, electronic tablets have severe limitations on computing power, so in this report
 I used the heuristic to detect region of interst. Detected regions are then preprocessed
 and passed to the text recognition module. In the text recognition module,
-two patterns of recognition using CTC and recognition combining
-Character Segmentation and Character Recognition were verified.
-
+two patterns of recognition using CTC and recognition using the API provided by Apple were verified.
 
 \subsection{Region of Interest Detection}
 
@@ -52,8 +50,10 @@ with a very small amount of computation, so this report adopted this method.
 \subsection{Recognition}
 
 In text recognition, two models were tried: a model that directly reads the content from the
-result of region of interest detection using CTC, and a two-staged approach in which
-Character Segmentation and Character Recognition were connected in series.
+result of region of interest detection using CTC, and the model which is provided by
+Apple\footnote{https://developer.apple.com/documentation/vision/vnrecognizetextrequest}.
+Note that Apple's VNRecognizeTextRequest API does not disclose its implementation or
+the model used inside, it is unknown exactly what processing is being done.
 
 \subsubsection{CTC}
 
@@ -67,25 +67,29 @@ a model which is fully constructed only by CNN was used for CTC model.
 To get an approximation for most probable labeling, greedy policy, the policy to take the
 most probable label at each time step, was used.
 
-\subsubsection{Character Segmentation}
+\subsubsection{VNRecognizeText API}
+VNRecognizeText API is an API provided by Apple officially,
+and its function is to detect text from the whole area where the drawing is and read it.
+Therefore there's no need to detect the region of interest to read the content inside.
+This API is completely a black box, accepts an image of any shape as input,
+reads the text in it, and outputs it with position information.
 
-The target environment of this report is on an electronic tablet,
-and since it does not have a complicated background,
-a model designed with a Unet-like~\cite{ronneberger2015unet} architecture based on MobilenetV2\cite{s2018mobilenetv2} was
-used for character segmentation with emphasis on speed and simplicity of the model.
-
-\subsubsection{Character Recognition}
-
-It is known that character recognition is sufficiently accurate even if
-a simple neural network model is used. Therefore, a small CNN model was designed
-in consideration of the amount of calculation.
-
+VNRecognizeText API has two modes for recognition, namely `.fast` and `.accurate`\footnote{https://developer.apple.com/documentation/vision/vnrequesttextrecognitionlevel}.
+According to the official introduction video\footnote{https://developer.apple.com/videos/play/wwdc2019/234/}
+if VNRecognizeText API, `.fast` uses traditional feature based method inside while
+`.accurate` uses more sophisticated Computer Vision model inside. As the names of those imply
+`.fast` is faster but not so accurate while `.accurate` is slower but more accurate. Both `.fast` and `.accurate`
+were tested. However, since `.fast` failed to recognize any handwritten letters, measurement on `.fast` was not conducted.
 \subsection{Auto-Complete}
 
 In this report, I deal with auto-completion as an application of the inference result.
 This auto-completion emphasizes simplicity and presents words
-that start with infered result in order of frequency.
-
+that start with infered result in order of frequency. To get the word candidates
+which start with infered result, I created an inverse index
+that maps the first few letters of words to a group of words with that prefix.
+For example, index "elbo" corresponds to word group \{"elbow", "elbow's", "elbowed", "elbowing", "elbowroom", "elbowroom's", "elbows"\}.
+Word suggestions for auto-completion are from /usr/share/dict/words of Debian GNU/Linux.
+Word frequencies were counted using wikipedia-word-frequency\footnote{https://github.com/IlyaSemenov/wikipedia-word-frequency}.
 \subsection{Dataset}
 
 % TODO: add footnotes
@@ -119,4 +123,4 @@ according to the path of the pen has been implemented.
 
 For training the model, Google Colaboratory environment
 \footnote{https://colab.research.google.com/notebooks/welcome.ipynb} has been used.
-All the implementation is published\footnote{https://github.com/koukyo1994/iOS-note-v2}.
+All the implementation is published at the GitHub repository\footnote{https://github.com/koukyo1994/iOS-note-v2}.
