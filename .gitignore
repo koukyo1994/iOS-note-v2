@@ -213,3 +213,5 @@ wordfreq.txt
 # binary
 *.h5
 *.mlmodel
+!src/py/bin/CTCModel.mlmodel
+!index.json
