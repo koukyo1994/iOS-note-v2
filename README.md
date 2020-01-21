@@ -4,8 +4,8 @@
 
 * mac OSX 10.15.2 or higher
 * Xcode 11.3.1 or higher
-* iPad with iPad OS 13.3 or higher
-* Apple Pencil
+* (iPad with iPad OS 13.3 or higher)
+* (Apple Pencil)
 
 To reproduce the training you'll be also required to have
 
@@ -24,3 +24,5 @@ To reproduce the training you'll be also required to have
 
 1. Open `src/NoteApp/NoteApp.xcodeproj` with Xcode.
 2. Compile and run on real device.
+
+In case you do not have iPad and Apple pencil, this application offers a way to do that with simulator. After starting up the App, click the button in the left of Navigation Bar that says `Finger / Stylus`. When it is set to `Finger`, you can use the App on simulator.
