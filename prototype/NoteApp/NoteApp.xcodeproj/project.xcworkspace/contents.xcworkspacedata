@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/hidehisa/Common/AppliedMachineLearning/myproject/iOS-note-v2/src/NoteApp/NoteApp/CTCModel.mlmodel">
+      location = "group:../NoteApp/CTCModel.mlmodel">
    </FileRef>
    <FileRef
       location = "self:">

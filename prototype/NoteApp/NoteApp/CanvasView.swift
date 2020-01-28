@@ -84,7 +84,7 @@ class CanvasView: UIImageView {
                 self.displayRegionOfInterest(rect: rect)
                 self.currentROI = rect
                 if let croppedImage = self.image?.cropRect(rect: rect)?.resize(height: 32)?.padding(in: CGRect(x: 0, y: 0, width: 200, height: 32)) {
-
+                    UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil)
                     let startTime = Date()
                     if self.detectWithCoreML {
                         let ciImage = CIImage(image: croppedImage)
