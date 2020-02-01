@@ -3,27 +3,29 @@
 
 \subsection{Region of Interest Detection}
 
-It is desirable for region of interest detection to cut out the region which if focused by
-the user. For example, when a user is writing a sentence,region of interest should be a word
-written, and when a user is drawing an illustration, region of interest should be the whole
+It is desirable for ROI detection to cut out the region which is focused by
+the user. For example, when a user is writing a sentence,ROI should be a word
+written, and when a user is drawing an illustration, ROI should be the whole
 illustration drawn.
 
-Since it is difficult to quantitatively measure the goodness of the region of interest detection,
+Since it is difficult to quantitatively measure the goodness of the ROI detection,
 only qualitative evaluation was performed this time.
-
 When cutting out only the words that the user is writing in the text,
-the region of interest detection worked almost without failure (Fig \ref{fig:cutting-word-region}).
+ROI detection worked almost without failure (Fig \ref{fig:cutting-word-region}).
 
 \begin{figure}
     \centering
     \includegraphics[scale=0.6]{images/word_region.png}
-    \caption{region of interest detection works well when cutting out a word which is being written}
+    \caption{ROI detection works well when cutting out a word which is being written}
     \label{fig:cutting-word-region}
 \end{figure}
 
 On the other hand, when cutting out a handwritten illustration,
 only a part of the illustration may be cut out if the lines constituting
 the illustration are not spatially close to each other (Fig \ref{fig:failure}).
+Note that the failure example may seem spatially close inside, but it is not the
+case when we split it up into a set of strokes and compare the distance between
+starting point and ending point of strokes.
 
 \begin{figure}
     \centering
@@ -50,7 +52,8 @@ designed to measure the goodness of auto-completion.
     process runs. Lower value of this metric indicates better result.
 \end{itemize}
 
-100 words were selected from the word list in /usr/share/dict/words of Debian GNU/Linux for evaluation.
+100 words were randomly selected from the word list of `wamerican` package of Debian GNU/Linux for evaluation.
+The selected word list is in the repository.
 Table \ref{tab:metrics} shows the performance of both methods on auto-completion. While OCC measure of
 VNRecognizeText API show better result than CTC, cumulative time elapsed for inference is almost doubled
 compared to that of CTC's.

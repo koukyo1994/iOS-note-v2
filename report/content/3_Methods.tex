@@ -25,6 +25,7 @@ To specify the region, two assumptions are made on region of interest.
 \end{enumerate}
 
 Based on these assumptions, ROI is detected by the following algorithm \ref{alg:roi}.
+Then the smallest rectangle containing the obtained point sequence is the ROI.
 It should be noted that we prioritize the reduction of the amount of computation and
 terminate the search for subsequences on the way.As a result, points that are not continuous
 in time but close in space may not be included in the ROI depending on the threshold setting.
@@ -124,6 +125,8 @@ that maps the first few letters of words to a group of words with that prefix.
 For example, index "elbo" corresponds to word group \{"elbow", "elbow's", "elbowed", "elbowing", "elbowroom", "elbowroom's", "elbows"\}.
 Word suggestions for auto-completion are from `wamerican` package\footnote{https://packages.debian.org/search?keywords=wamerican} of Debian GNU/Linux.
 Word frequencies were counted using wikipedia-word-frequency\footnote{https://github.com/IlyaSemenov/wikipedia-word-frequency}.
+We implemented auto-completion to be performed each time the pen is released from the tablet surface.
+
 \subsection{Dataset}
 
 Handwritten character recognition and handwritten sentence recognition are
@@ -134,7 +137,7 @@ We therefore took an approach to create a composite dataset by
 embedding a combination of existing handwritten-like fonts with randomly picked fontsize and
 randomly selected English words in the image. The words are selected from `wamerican` package
 and 10,000 images were generated for training. We split the dataset to 80\% / 20\% each for training / validation.
-The fonts
+The fonts used are listed up in the repository\footnote{https://github.com/koukyo1994/iOS-note-v2/blob/master/prototype/py/fonts/list.txt}.
 Figure \ref{fig:generated_image} shows an example of training data generated with this method.
 
 \begin{figure}
@@ -150,10 +153,12 @@ we didn't apply further image augmentation techniques.
 
 \subsection{Implementation}
 
-I used Python3.6\footnote{https://www.python.org/downloads/release/python-360/} and
+We used Python3.6\footnote{https://www.python.org/downloads/release/python-360/} and
 TensorFlow2.1\footnote{https://www.tensorflow.org/} for building machine learning
 models and training, and used coremltools3.2\footnote{https://apple.github.io/coremltools/}
-to convert the models into the format that can work on iOS.
+to convert the models into the format that can work on iOS.For training,
+Adam optimizer with learning rate 5e-5. `beta\_1` and `beta\_2` parameters are set to 0.9 and 0.999 each.
+The trainig was performed 50 epochs with batch size 32.
 
 To get handwritten document image from the iOS electronic tablet, a function to print
 the input from the Apple Pencil\footnote{https://www.apple.com/apple-pencil/} on the white canvas
