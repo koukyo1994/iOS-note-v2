@@ -4,7 +4,7 @@
 \subsection{Region of Interest Detection}
 
 It is desirable for ROI detection to cut out the region which is focused by
-the user. For example, when a user is writing a sentence,ROI should be a word
+the user. For example, when a user is writing a sentence, ROI should be a word
 written, and when a user is drawing an illustration, ROI should be the whole
 illustration drawn.
 
@@ -47,25 +47,27 @@ designed to measure the goodness of auto-completion.
     and the number of characters in the word.
     If it is not found after writing to the end, the score is 0. Higher value of this metric indicates better result.
     \item Cumulative Time for Inference (CTI) - Cumulative time spent on auto-completion until the word that the writer actually
-    wants to write is included in the top 10 auto-completion candidates. If it is not found after writing to the end,
+    wants to write is included in the top 10 auto-completion candidates. It should be noted that CTI is not proportional
+    to the actual inference time at each time step, because the earlier the word included in the list, the shorter CTI is.
+    If it is not found after writing to the end,
     the score cumulative time spent on the recognition at each step. Note that each time writer releases the pen tip from the tablet, recognition
     process runs. Lower value of this metric indicates better result.
 \end{itemize}
 
 100 words were randomly selected from the word list of `wamerican` package of Debian GNU/Linux for evaluation.
-The selected word list is in the repository.
+The selected word list is in the repository\footnote{https://github.com/koukyo1994/iOS-note-v2/blob/master/prototype/py/data/experimented.txt}.
 Table \ref{tab:metrics} shows the performance of both methods on auto-completion. While OCC measure of
 VNRecognizeText API show better result than CTC, cumulative time elapsed for inference is almost doubled
 compared to that of CTC's.
 
 \begin{table}[htbp]
     \centering
+    \caption{Perfromance of CTC and VNRecognizeText API on auto-completion}
     \begin{tabular}{|l||c|c|} \hline
     method & OCC (mean) & CTI (mean) \\ \hline \hline
     CTC & 1.0102 & 1.1060 \\ \hline
     VNRecognizeText (.accurate) & 3.3405 & 1.9751 \\ \hline
     \end{tabular}
-    \caption{Perfromance of CTC and VNRecognizeText API on auto-completion.}
     \label{tab:metrics}
 \end{table}
 
@@ -81,7 +83,7 @@ Figure \ref{fig:auto-complete} show an example of how auto-completion works.
 \subsection{Discussion}
 
 The VNRecognizeText API is superior to CTC in character recognition accuracy,
-but in terms of speed it takes about three times longer to infer.
+but in terms of speed it takes about three times longer to infer for each time step.
 Since auto-completion is an application that requires real-time performance,
 a small lag does not provide a good user experience. Therefore,
 poor performance in speed can be a problem.
@@ -99,7 +101,7 @@ Figure \ref{fig:unstable} shows an example of unstable inference.
     \label{fig:unstable}
 \end{figure}
 
-This is probably because training of the CTC model seems to be over-fitty
+This is probably because training of the CTC model seems to be overfitting
 and strongly depends on the dataset used for training.
 Therefore, future tasks include reducing the reliance on datasets and
 using larger datasets or using data augmentation techniques to improve generalization performance.

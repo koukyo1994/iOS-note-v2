@@ -1,14 +1,21 @@
 \section{Future Work \& Conclusion}
 \label{section:conclusion}
 
-The goal of this report is to create an application to recognize sentences
-on iOS for documents where handwritten illustrations and characters were mixed.
-Although it is imperfect, the heuristic used for region of interest detection successfully
+The goal of this report is to create an application to recognize sentences on iOS
+and assist handwriting so that handwriting can be on par with keyboard input.
+Although it is imperfect, the heuristic used for ROI detection successfully
 detect a word out of a sentence, and can cut handwritten illustration out from the other
-part of document without requreing large amount of computation.
-On the other hand, text recognition had a trade-off between speed and accuracy.
+part of document without requiring large amount of computation. Since current ROI detection
+algorithm does not parse all the trajectory and instead seaches for the subsequence included
+in ROI from the end of the sequence iteratively for the sake of speed, it is sometimes the case
+that strokes that should be included in ROI intuitively are not included.
+Future tasks include improving this point.
 
+On the other hand, text recognition had a trade-off between speed and accuracy.
 Future tasks include improving the accuracy of text recognition without slowing it down.
+Since this work does not elaborate on collecting datasets, or hyperparameters search,
+the starting point of improving the accuracy can be either of them.
+
 Another example of future work is to perform more accurate text recognition and ROI detection
-using an online method. In auto-completion, prediction using information on surrounding words,
+using an online method.In auto-completion, prediction using information on surrounding words,
 and refinement of the method of presenting complement candidates can also be one of future works.
