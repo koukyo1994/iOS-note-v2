@@ -1,33 +1,52 @@
 \section{Introduction}
 
-Handwriting recognition (HWR) is a field which study and develop algorithms to
-interpret handwritten inputs into a format that can be easily handled by computers
-from sources such as papers, photographs, electronic tablets, and other devices.
-HWR can be roughly devided into two appproaches:
-online approach and offline approach~\cite{plamondon2000online}.\\
-While online approach uses information on the trajectory of the pen tip
-obtained from a special pen for classification, offline method uses
-optically scanned images as input and performs recognition using computer vision techniques.
-This report focuses only on offline approach, and tackle on the recognition problem
-using Convolutional Neural Network (CNN), which have shown a remarkable development in recent years.\\
+Handwriting has played a very important role as a means of human knowledge preservation
+or communication from the invention of letters to the modern times.
+Its role has been reduced with the spread of printing and computers,
+but in many parts of our lives, we still have the opportunity to write and read handwriting.
+For example, Students in a classroom still prefer to use paper and pen or electronic tablet
+to store knowledge, mathematical formulas, graphs, etc.,
+rather than taking notes using keyboard and computer.
+On the other hand, in computer work such as searching or document writing,
+input is almost always performed with keyboard, and input by handwriting is rare.
+This is, of course, because computer cannot handle handwritten input as text as it is,
+but also because keyboard is more efficient for inputting characters.
+With a keyboard, we can enter characters with less movement compared to handwriting.
+Besides, there are also assisting functions for keyboard input such as copy and paste,
+searching, or formatting. Since keyboard input has these overwhelming advantages,
+people usually try to use keyboard even for tasks which are actually easier to be done by hand,
+or to use keyboard for writing and use tablet device for those tasks that are not achievable with keyboard.
+However, with the spread of tablet devices in recent years, this situation is showing signs of change.
+On these devices, input work that keyboards are not good at, such as drawing illustrations and
+writing mathematical formulas, can be easier. In addition, applications
+\footnote{https://www.nebo.app/}\footnote{http://mazec.jp/} have appeared that can handle handwriting
+as text format by applying Handwriting Recognition technology that has been studied for many years.
+Thanks to these technological improvements, handwriting is becoming an available option for inputting text,
+but it is not yet as efficient as a keyboard is. One of the reason for this is the lack of input assistance.
+Therefore, in this work, we propose an application that combines Handwriting Recognition and auto-completion
+to assist handwriting and to enable it be treated as text format on devices.
 
-% TODO: add some references of these applications
-HWR is a field that has been studied for a long time, and many applications have already been made.
-However, in the case of tablet devices that have spread rapidly in recent years, not so many applications
-have been created even after APIs to incorporate with pattern recognition algorithms on device are published
-by developpers of those devices. Although some applications\footnote{https://www.nebo.app/} have achieved very good
-result on normal handwritten text recognition, it is not the case when elements in other domains
-such as handwritten illustlations are mixed in addition to sentences.
-Also, APIs published by the manufacturer of those devices are usually black-boxes and poorly extensible.
-The main target of these APIs is printed text, and when applied to handwritten characters,
-performance may not be as high as expected.
+Our application consists of two elements: Handwriting Recognition and auto-completion.
+Handwriting Recognition (HWR) is a technology that
+interprets handwritten inputs from sources such as papers,
+photographs, electronic tablets, and other devices into a format
+that can be easily handled by computers.
+In most of the modern work of HWR, the process pipeline is divided into Handwritten Text Detection
+and Handwritten Text Recognition~\cite{long2018scene}. The processing of text detection
+tends to be complicated\cite{long2018scene}, and it takes a considerable amount of time to
+perform processing on the entire input image. It is known
+\footnote{http://glinden.blogspot.com/2006/11/marissa-mayer-at-web-20.html} that longer processing time
+in applications that require a quick response, such as auto-completion,
+can seriously degrade the user experience. Therefore we propose a method to avoid performing
+Text Detection using a simple heuristic: Region of Interest (ROI) detection.
 
-I therefore endeavor to recognize handwritten documents on device, especially those which contain not only text,
-but also handwritten illustlations or mathematical formulas. Since this type of documents are very common
-in our daily life, the success of the project can potentially bring the fusion of digital
-technology and the long-standing human skills of handwriting. \\
+Auto-completion is a program that predicts the rest of the word a user is typing based on the letters entered
+or the recent word pairs~\cite{darragh1990reactive}. It is widely used in web browsers, in email programs,
+in source code editors or in word processors. If the correct word is included in the predicted words list,
+the user can save the time to enter the rest of the word. In this work, to make the process simple,
+we used forward matching algorithm for this purpose.
 
 In the following section, typical approaches of HWR and related works are introduced.
-Section three provides technical details of the approach to the problem addressed in
-this report. Section four describes the result of the approach and discuss on that.
-Section five concludes this report with future prospects.\\
+Section \ref{section:methods} provides technical details of the approach to the problem addressed in
+this report. Section \ref{section:result-discussion} describes the result of the approach and discuss on that.
+Section \ref{section:conclusion} concludes this report with future prospects.

@@ -1,23 +1,18 @@
 \section{Methods}
+\label{section:methods}
 
-This section describes in detail the approach to the classification problem
-in documents that contain handwritten text as well as handwritten illustrations.
-
-As in the case of Scene Text Detection/Recognition, it is effective to separate Text Detection
+As in the case of Scene Text Detection / Recognition, it is effective to separate Text Detection
 and Text Recognition and treat them as different problems.
 Furthermore, it is possible to record the written area due to the characteristics of the electronic tablet,
 so using a simple heuristic on the trajectory data eliminates the need to actually perform text detection.
 The role of this step, namely "Region of Interest Detection" step is to reduce the size of data
 passed to the subsequent processing and suppress the increase in the amount of calculation.
-
-In general, electronic tablets have severe limitations on computing power, so in this report
-I used the heuristic to detect region of interst. Detected regions are then preprocessed
-and passed to the text recognition module. In the text recognition module,
+Detected regions are then preprocessed and passed to the text recognition module. In the text recognition module,
 two patterns of recognition using CTC and recognition using the API provided by Apple were verified.
 
 \subsection{Region of Interest Detection}
 
-The purpose of region-of-interest detection is to cut out sub-sequence
+The purpose of Region of Interest (ROI) detection is to cut out sub-sequence
 representing words and illustrations from the dot sequence of the pen tip trajectory
 and cut back the data to be passed to the subsequent processing to
 reduce the amount of calculation and improve the recognition accuracy.
@@ -29,7 +24,43 @@ To specify the region, two assumptions are made on region of interest.
     \item Objects drawn in the region of interest are spatially close
 \end{enumerate}
 
-Based on these assumptions, region of interest is successfully detected.
+Based on these assumptions, ROI is detected by the following algorithm \ref{alg:roi}.
+It should be noted that we prioritize the reduction of the amount of computation and
+terminate the search for subsequences on the way.As a result, points that are not continuous
+in time but close in space may not be included in the ROI depending on the threshold setting.
+However, when priority is given to spatial proximity, it is necessary to parse the entire
+trajectory every time we perform ROI detection, and if the size of the point sequence becomes large,
+it may be a bottleneck in calculation. Therefore we decided to use this method,
+but better approaches will be discussed in the section \ref{section:conclusion}.
+
+\begin{algorithm}
+\DontPrintSemicolon
+    \KwInput{$S=\{s_1,s_2,\cdots,s_n\}~where~s_i=(c_i, t_i)$}
+    \KwOutput{$\sigma=\{s_k, s_k+1, \cdots, s_n\}~1\le k \le n$}
+    subset := \{\} \\
+    $c_{prev} := c_n$ \\
+    $t_{prev} := t_n$ \\
+    \For{$s_i~in~reversed(S)\setminus s_n$}
+    {
+        $c_i, t_i \leftarrow s_i$\\
+        \If{$t_{prev} - t_i < t_{threshold}$}
+        {
+            $subset \leftarrow subset \cup \{s_i\}$ \\
+
+        } \Else{
+            \If{$distance(c_{prev}, c_i) < c_{threshold}$}{
+                $subset \leftarrow subset \cup \{s_i\}$
+            } \Else {
+                break
+            }
+        }
+        $c_{prev} \leftarrow c_i$ \\
+        $t_{prev} \leftarrow t_i$
+    }
+\caption{ROI detection}
+\label{alg:roi}
+\end{algorithm}
+
 Figure \ref{fig:region_of_interest} shows an example of the region detected with
 this heuristic.
 
@@ -63,7 +94,8 @@ However, RNN performs computations slowly compared to CNN,
 and in recent years its effectiveness in CTC is sometimes questioned~\cite{puigcerver2017multidimensional}.
 Given that all calculations are done on iOS, and based on research that the
 output layer of the CTC model can also be configured using CNN~\cite{gao2017reading}, in this report
-a model which is fully constructed only by CNN was used for CTC model.
+a model which is fully constructed only by CNN was used for CTC model. The detail of the
+model configuration can be found in the repository\footnote{https://github.com/koukyo1994/iOS-note-v2/blob/master/prototype/py/model.py}.
 To get an approximation for most probable labeling, greedy policy, the policy to take the
 most probable label at each time step, was used.
 
@@ -71,6 +103,8 @@ most probable label at each time step, was used.
 VNRecognizeText API is an API provided by Apple officially,
 and its function is to detect text from the whole area where the drawing is and read it.
 Therefore there's no need to detect the region of interest to read the content inside.
+However, in order to make the inference fast, we used ROI detection as a preprocessing before
+putting an image to the API.
 This API is completely a black box, accepts an image of any shape as input,
 reads the text in it, and outputs it with position information.
 
@@ -82,25 +116,25 @@ if VNRecognizeText API, `.fast` uses traditional feature based method inside whi
 were tested. However, since `.fast` failed to recognize any handwritten letters, measurement on `.fast` was not conducted.
 \subsection{Auto-Complete}
 
-In this report, I deal with auto-completion as an application of the inference result.
+In this report, we deal with auto-completion as an application of the inference result.
 This auto-completion emphasizes simplicity and presents words
 that start with infered result in order of frequency. To get the word candidates
-which start with infered result, I created an inverse index
+which start with infered result, we created an inverse index
 that maps the first few letters of words to a group of words with that prefix.
 For example, index "elbo" corresponds to word group \{"elbow", "elbow's", "elbowed", "elbowing", "elbowroom", "elbowroom's", "elbows"\}.
-Word suggestions for auto-completion are from /usr/share/dict/words of Debian GNU/Linux.
+Word suggestions for auto-completion are from `wamerican` package\footnote{https://packages.debian.org/search?keywords=wamerican} of Debian GNU/Linux.
 Word frequencies were counted using wikipedia-word-frequency\footnote{https://github.com/IlyaSemenov/wikipedia-word-frequency}.
 \subsection{Dataset}
 
-% TODO: add footnotes
 Handwritten character recognition and handwritten sentence recognition are
 fields that have been studied for a long time, so there are many data sets,
 but these are often provided in different formats, and there is some difficulty
 in eliminating differences between formats and using them for training dataset.
-
-I therefore took an approach to create a composite dataset by
-embedding a combination of existing handwritten-like fonts and
-randomly selected English words in the image.
+We therefore took an approach to create a composite dataset by
+embedding a combination of existing handwritten-like fonts with randomly picked fontsize and
+randomly selected English words in the image. The words are selected from `wamerican` package
+and 10,000 images were generated for training. We split the dataset to 80\% / 20\% each for training / validation.
+The fonts
 Figure \ref{fig:generated_image} shows an example of training data generated with this method.
 
 \begin{figure}
@@ -109,6 +143,10 @@ Figure \ref{fig:generated_image} shows an example of training data generated wit
     \caption{Generated image using handwritten-like fonts}
     \label{fig:generated_image}
 \end{figure}
+
+For image pre-processing, we only used vertical and horizontal random offset of characters in a word.
+Since the image taken from the prototype application has white background with no blurriness,
+we didn't apply further image augmentation techniques.
 
 \subsection{Implementation}
 

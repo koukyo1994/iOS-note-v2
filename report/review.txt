@@ -1,0 +1,113 @@
+----------------------- REVIEW 1 ---------------------
+SUBMISSION: 5
+TITLE: Handwritten Editor
+AUTHORS: Hidehisa Arai
+
+----------- Related Work & Foundations -----------
+SCORE: -1 (needs work)
+----- TEXT:
+I like your introduction. Just one thing: I suggest you use references (resulting in Section III) instead manually typing the words (Section three) in the final paragraph.
+Related Work:
+A. Detection: Second paragraph: what do you mean by "simplify the pipeline"? How is this connected to text detection models that are added to the general object detection model?
+A. Detection: Third paragraph: Here you reference "reasons described below" that explain why this report does not elaborate on text detection. I don't think forward references are good in general, but I also couldn't find the referenced reasons anywhere in the report (maybe this was just not explicitly mentioned and I didn't get that one of the topics elaborated is connected to this decision?)
+For the math on CTC in B. Recognition: Honestly I didn't get all of it in depth (that's probably my fault - I'm in my third bachelor's semester...). Why is the label \pi_t annotated with the time index? Doesn't the label remain constant at all times? Only the probability y changes over time and that one already has the time index.
+
+I also thing a short wrap-up at the very end of Section II would be good after the in-depth paragraphs on CTC.
+----------- Contributions & Reproducibility -----------
+SCORE: 0 (neutral)
+----- TEXT:
+I think you could add more detail on the dataset: You did add a random vertical offset to the characters. Why didn't you add scaling/warping/blurring/rotation? Did you mix different Fonts? Does the dataset contain capital letters (the prototype did perform rather bad on that ones)? Did you use cursive fonts?
+
+Your prototype worked perfectly well. I was able to reproduce the various effects and characteristics you described in Section IV.
+
+I think you should mention the fact that "each time (the) writer releases the pen tip from the tablet, (the) recognition process runs" in Section III.
+
+Also, be more clear on what you contributed to the CTC approach. Did you figure out the model structure and training parameters/optimizer, etc. yourself or did you just reproduce an other paper's work? Did you experiment with different model structures/hyperparameters?
+----------- Results & Future Work -----------
+SCORE: 0 (neutral)
+----- TEXT:
+"On the other hand, when cutting out a handwritten illustra- tion, only a part of the illustration may be cut out if the lines constituting the illustration are not spatially close to each other (Fig 4)." I don't quite understand this explanation, since the legs TOUCH the rest of the body in this image.
+
+For the CTI you mention different factors. At first "almost doubled" (1.9751/1.1060 = 1.785) which is ok, but later on "it takes about three times longer to infer". Is this a mistake, or do you only consider the character recognition here, while CTI does also take character detection and the rest of the algorithm into account? If so, please make this more explicit.
+
+One information I'm missing in this chapter is the average word-length. With that the OCC metric would be way more meaningful, since you can say which percentage of writing-time can be saved. Also, then you can compare OCC (related to time spent for writing a text) and CTI (related to battery drain).
+
+For Section V I think hints on direction and approaches for further research based on your experience (I'm sure you gathered more experience as what is written down in this paper) would be really helpful. Also, at that point you don't have to scientifically proof your thesis, this can just be a wild guess based on your experience.
+----------- Overall evaluation -----------
+SCORE: 0 (Some weaknesses and good elements)
+----- TEXT:
+Keep an eye on grammar and the structure of your sentences.
+I don't quite like your title. I think it should describe more clearly what this paper contains and what technology is used. E.g. Application of CTC in Handwritten Text Recognition
+
+
+
+----------------------- REVIEW 2 ---------------------
+SUBMISSION: 5
+TITLE: Handwritten Editor
+AUTHORS: Hidehisa Arai
+
+----------- Related Work & Foundations -----------
+SCORE: 1 (good)
+----- TEXT:
+In the foundations, the author describes their motivation to build a handwritten text editor, existing tools and their limitations, the expected outcomes from their prototype and structure of the paper. In related work section, the author explains the two-fold detection and  recognition method used in handwritten text editing tools and the state-of-art Machine Learning algorithms for recognition. The sections provide a substantial background to motivation for the project and shows that the author’s strong understanding of the existing literature in this area especially for recognition algorithms. For example, the author provides insight into the inner workings of different recognition algorithms and especially for characters eg. CTC method and their relevance to the prototype. However, the author does not dig deep into the other important section for handwritten text editors - detection algorithms. While they mention that this section will not be elaborated in the report, !
+ the reasons for this is not mentioned. For example, the author writes “Since this report does not elaborate on text detection with the reasons described below, no more detailed explanation are provided.” However, no reasons are described below and author moves on to character recognition algorithms.
+----------- Contributions & Reproducibility -----------
+SCORE: 2 (excellent)
+----- TEXT:
+The author successfully builds an application to detect and recognise text in documents where handwritten illustrations and characters were mixed using iOS platform. The author tries different approaches for the prototype eg. CTC vs VNRecognizeText API for recognition and evaluates them for their strengths and limitations. This shows the author's strong understanding of existing work in this area and motivation to improve their prototype results. The prototype also offers additional feature of autocompletion which I feel is very valuable for such an application as it saves user’s time. This shows that the author has not only endeavoured to build the application using state-of-art approaches but also has optimised the prototype for user experience.
+
+Since training was done on GPU, I used the existing trained models for reproducing the results. Since I didn’t have an iPad or Apple Pencil, I used the simulator for evaluation. I was able to reproduce the results using the word ‘table’ and figure in the report. Personally, I felt that the accuracy of autocomplete was lacking eg. exam → example was not suggested and for figures with text inside, all parts were detected as figure.
+----------- Results & Future Work -----------
+SCORE: 1 (good)
+----- TEXT:
+The author explores different evaluation metrics for major areas eg. detection (eg. ROI detection for figures), recognition and autocompletion eg.OCC etc. This shows that the author has critically evaluated their prototype for strengths and weaknesses.  However, it would have been good if the author could have provided the dataset they used for autocomplete evaluation in git repository eg. “100 words were selected from the word list in /usr/share/dict/words of Debian GNU/Linux for evaluation” However, no such path was found in repository. If the file exists in the repository but at a different path, the report should be accordingly.
+
+As mentioned in the earlier section, my experience was as follows:
+I felt that the accuracy of autocomplete was lacking eg. exam → example was not suggested
+For figures with text inside, all parts were detected as figure.
+The author also mentions that recognition might not be completely accurate on out-of-dictionary words. This might have been an issue with some words I used eg. Recurrent Neural Network, simaltenously
+
+However, the author proposes in future work to improve these areas. Additionally, I am in favour of using context-based approaches for auto completion and I feel that this would offer the prototype a huge boost for auto-complete feature and improve user experience.
+----------- Overall evaluation -----------
+SCORE: 2 (Great Seminar Report)
+----- TEXT:
+The author was able to clearly explain their motivations, discuss state-of-art approaches in this area, describe the methodology and results as well as critically evaluate their prototype for its’ limitations. Overall, the language was clear, concise, fluid and offered a good flow. The initial sections provide a good foundation to state-of-art approaches and shows that the author’s strong understanding of the existing literature in this area especially for recognition algorithms. I was able to understand the work and algorithms well as well as reproduce the results. While the seminar report was overall good, here are some possible improvements:
+1. It would have been good if the author could have provided the dataset they used for autocomplete evaluation in git repository eg. “100 words were selected from the word list in /usr/share/dict/words of Debian GNU/Linux for evaluation” However, no such path was found in repository. If the file exists in the repository but at a different path, the report should be accordingly.
+2. Few formatting issues in paper eg. footnote and text are on different line in Section 3e, footnote 10
+3. Few words are not used in correct form eg. Section 4c overfitty
+4. The author mentions in Section 3D. That they created a composite dataset by embedding a combination of existing handwritten-like fonts and randomly selected English words in the image. While they provide an example, some more details about this dataset would be appreciated eg. size of dataset, a list of english words used.
+5. The author mentions in Section 1. Introduction about similar existing applications and APIs and their limitations. However, only one such application is mentioned in footnote i.e. https://www.nebo.app/ and no example of APIs is given in that section. It would be good if author could list a few different similar applications or APIs and offer a comparison of their strengths and weaknesses as well as the author’s tool over the same criterion mentioned in the report eg. OCC, CTI, ROI detection
+
+
+
+----------------------- REVIEW 3 ---------------------
+SUBMISSION: 5
+TITLE: Handwritten Editor
+AUTHORS: Hidehisa Arai
+
+----------- Related Work & Foundations -----------
+SCORE: 0 (neutral)
+----- TEXT:
+- In general, the author should provide a clearer motivation why the work done in the seminar report is interesting and different from other text recognition work. Highlight the focus on formulas and images and incorporate that in the related work too. In addition, the autocomplete work is not mentioned extensively in the abstract and the introduction
+- "Section three" the reviewer suggests that the author might refer to sections by there name
+- "Since this report does not elaborate on text detection with the reasons described below, no more detailed explanation are provided.". There are no reasons provided below.
+----------- Contributions & Reproducibility -----------
+SCORE: 1 (good)
+----- TEXT:
+- The reviewer is missing information about the preprocessing done to the dataset as well as the hyper-parameters chosen to train the model.
+- The application seems to be a good use case of the work performed as part of the seminar report
+----------- Results & Future Work -----------
+SCORE: 0 (neutral)
+----- TEXT:
+- The author provides an overview of the results including some visual example of the work done as part of the seminar report
+- "TABLE I" table headings should be displayed above a title, captions below
+- "100 words were selected from the word list in /usr/share/dict/words of Debian GNU/Linux for evaluation." This could be described a bit more scientific
+- Feel free to provide a screenshot of the prototype and showcasing how the different components interact with each other in the iOS application
+- The future work contains all important elements
+- "but in terms of speed it takes about three times longer to infer." != "cumulative time elapsed for inference is almost doubled compared to that of CTC’s"
+----------- Overall evaluation -----------
+SCORE: 1 (Generally well written, only minor changes needed)
+----- TEXT:
+- "Handwritten editor," the reviewer thinks that the title is too generic. All words except "the", "in" and so on should be written uppercase.
+-  The abstract seems to be too short for the work done as part of the research. In general, the abstract should go more into detail about the work done and should provide some overview of the content of the seminar report
+- In general, the reviewer notices a few typos and formatting errors as part of the seminar report. You can improve the readability of the seminar report by using short sentences and sticking to a scientific writing style by not using "I", "me" and if needed, only use "we" instead.

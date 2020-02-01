@@ -1,24 +1,32 @@
 \section{Related Work}
+\label{section:related-work}
 
-The problem settings of this project can be positioned as one variant of Scene Text Detection/Recognition, which
-is a field to study algorithms to extract and recognize text information written in natural images.
+\subsection{Handwriting Recognition Taxonomy}
+
+HWR can be roughly devided into two appproaches:
+online approach and offline approach~\cite{plamondon2000online}.
+While online approach uses information on the trajectory of the pen tip
+obtained from a special pen for classification, offline method uses
+optically scanned images as input and performs recognition using computer vision techniques.
+In this work, for simplisity of the pipeline, we focuses only on offline approach.
+
+Offline approach of HWR can be positioned as one variant of Scene Text Detection / Recognition, which
+is a technology to extract and recognize text information written in natural images.
 Due to the recent development of Neural Networks technology,
-much research has been done in this field to this day~\cite{long2018scene}.\\
-Except for few methods\cite{liu2018fots}\cite{lyu2018mask}, most approaches of Scene Text Detection/Recognition
-separate detection and recognition and perform stepwise inference.
+much research has been done in this field to this day.
+Except for few methods\cite{liu2018fots}\cite{lyu2018mask}, most approaches of Scene Text Detection / Recognition
+separate text detection and text recognition and perform stepwise inference.
 
 \subsection{Detection}
 
 Scene Text Detection can be subsumed under general object detection, therefore those methods usually follow
 the same procedure of object detection, which is dichotomized as one-stage methods and two-stage ones~\cite{liu2018deep}.
-
 After the emergence of FasterR-CNN\cite{ren2015faster}, most of the modern text detection algorithms
-are based on FasterR-CNN, YOLO\cite{redmon2016you}, SSD\cite{liu2016ssd}. In addition to the
-general object detection model, text detection models are devised to detect tilted bounding boxes
-and character regions of arbitrary shapes, or to simplify the pipeline.
+are based on FasterR-CNN, YOLO\cite{redmon2016you}, SSD\cite{liu2016ssd}.
 
-Since this report does not elaborate on text detection with the reasons described below,
-no more detailed explanation are provided.
+In addition to the general object detection model, text detection models are devised to detect
+tilted bounding boxes\cite{zhou2017east}\cite{jiang2017r2cnn} and character regions of arbitrary shapes\cite{zhang2019look},
+or to simplify the pipeline\cite{he2017single}, since pipeline of text detection tends to be complicated\cite{liu2018deep}.
 
 \subsection{Recognition}
 
@@ -28,13 +36,13 @@ overall accuracy. It is especially difficult to segment connected characters suc
 Therefore some techniques which do not rely on character segmentation have been developped so far.
 This report introduces a method called Connectionist Temporal Classification (CTC)~\cite{graves2006connectionist}.
 
-CTC was first introduced to handle sequence labeling of arbitrary length,
+CTC was first proposed to handle sequence labeling of arbitrary length,
 requiring no pre-segmented training data. A CTC network outputs probabilities for each label
 at each time step. Time step length can be any length longer than label length.
 The output at each time step is the probability of the classess to be recognized plus
 the extra class representing "blank". Let this output probabilities be
-$\mathbf{y}=(y_1, y_2, \cdots, y_w)$ and denote by $y_{\pi_t}^{t}$ the activation of
-label $\pi_t$ at time step $t$. Given this probability distribution, the conditional
+$\mathbf{y}=(y_1, y_2, \cdots, y_w)$ and denote by $y_{k}^{t}$ the activation of
+label $k$ at time step $t$. Given this probability distribution, the conditional
 probability of the sequence is calculated as follows.
 
 \begin{equation}
@@ -87,7 +95,17 @@ it utilized. The objective function of this can be negative log-likelihood
 
 \begin{equation}
     \mathcal{O} = -\sum_{(I_i, l_i)\in\mathcal{D}} \log p(l_i|\mathbf{y}_i)
+    \label{eq:loss}
 \end{equation}
 
 where $\mathbf{y}_i = f(I_i)$ and $f(\cdot)$ represents the classifier. To minimize negative
-log-likelihood, Stochastic Gradient Descent (SGD) can be used.
+log-likelihood, Stochastic Gradient Descent (SGD) can be used. To summarize,
+a model that performs text recognition with CTC can be obtained by defining a network
+that outputs a sequence longer than the required label length and
+training the network so as to minimize the loss function (\ref{eq:loss}). After the fitting,
+model outputs a sequence of probabilities of labels for a given input. Each time step of the sequence
+corresponds to, if the input is an image, image patches arranged in the direction of writing.
+We then get final prediction by putting the output sequence to a many-to-one mapping.
+There are several options for this many-to-one mapping, but the one to get highest probabilities
+at each time step and the one which use forward-backward algorithm is considered to achieve
+good performance in practice.
