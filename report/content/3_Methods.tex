@@ -7,7 +7,11 @@ Furthermore, it is possible to record the written area due to the characteristic
 so using a simple heuristic on the trajectory data eliminates the need to actually perform text detection.
 The role of this step, namely "Region of Interest Detection" step is to reduce the size of data
 passed to the subsequent processing and suppress the increase in the amount of calculation.
-Detected regions are then preprocessed and passed to the text recognition module. In the text recognition module,
+Detected regions are then preprocessed and passed to the text recognition module.
+In the current implementation, illustrations and handwritten characters cannot be separated,
+so even if the user is writing illustrations, processing is passed to the handwriting recognition module,
+but improvements in this part are discussed in Section \ref{section:conclusion}.
+In the text recognition module,
 two patterns of recognition using CTC and recognition using the API provided by Apple were verified.
 
 \subsection{Region of Interest Detection}

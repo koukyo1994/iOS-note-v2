@@ -10,6 +10,10 @@ algorithm does not parse all the trajectory and instead seaches for the subseque
 in ROI from the end of the sequence iteratively for the sake of speed, it is sometimes the case
 that strokes that should be included in ROI intuitively are not included.
 Future tasks include improving this point.
+It should also be noted that current implementation cannot separate handwriting from handwritten illustrations,
+therefore text recognition process is always performed even if the user is drawing an illustration.
+To prevent this, we need to put another process to check whether the output of ROI detection is
+an illustation or text. Putting that process into the pipeline is also a future work.
 
 On the other hand, text recognition had a trade-off between speed and accuracy.
 Future tasks include improving the accuracy of text recognition without slowing it down.
