@@ -162,7 +162,8 @@ TensorFlow2.1\footnote{https://www.tensorflow.org/} for building machine learnin
 models and training, and used coremltools3.2\footnote{https://apple.github.io/coremltools/}
 to convert the models into the format that can work on iOS.For training,
 Adam optimizer with learning rate 5e-5. `beta\_1` and `beta\_2` parameters are set to 0.9 and 0.999 each.
-The trainig was performed 50 epochs with batch size 32.
+The trainig was performed 50 epochs with batch size 32. Due to the limitations of coremltools,
+we fixed the image size to 32x200 and padded the image.
 
 To get handwritten document image from the iOS electronic tablet, a function to print
 the input from the Apple Pencil\footnote{https://www.apple.com/apple-pencil/} on the white canvas

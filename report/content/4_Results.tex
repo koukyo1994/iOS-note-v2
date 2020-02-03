@@ -61,14 +61,17 @@ VNRecognizeText API show better result than CTC, cumulative time elapsed for inf
 compared to that of CTC's.
 
 \begin{table}[htbp]
+    \begin{center}
+        \caption{}
+        \begin{tabular}{|l||c|c|} \hline
+        method & OCC (mean) & CTI (mean) \\ \hline \hline
+        CTC & 1.0102 & 1.1060 \\ \hline
+        VNRecognizeText (.accurate) & 3.3405 & 1.9751 \\ \hline
+        \end{tabular}
+        \label{tab:metrics}
+    \end{center}
     \centering
-    \caption{Perfromance of CTC and VNRecognizeText API on auto-completion}
-    \begin{tabular}{|l||c|c|} \hline
-    method & OCC (mean) & CTI (mean) \\ \hline \hline
-    CTC & 1.0102 & 1.1060 \\ \hline
-    VNRecognizeText (.accurate) & 3.3405 & 1.9751 \\ \hline
-    \end{tabular}
-    \label{tab:metrics}
+    Perfromance of CTC and VNRecognizeText API on auto-completion
 \end{table}
 
 \begin{figure}
