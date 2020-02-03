@@ -15,23 +15,23 @@ import CoreML
 class CanvasView: UIImageView {
     private let baseSize: CGFloat = 3.0
     private var color: UIColor = .black
-    
+
     private var ruledLineHeight: CGFloat = 30.0
 
     private var touchDate = Date()
     private var lastLocation = CGPoint()
     private var touchEvents = [(interval: Double, distance: Double, point: CGPoint)]()
-    
+
     private let roiThreshold = 1.0
     private let distanceThreshold = 30.0
     private var currentROI = CGRect()
-    
+
     public var inverseIndex: [String: [Int]]!
     public var wordList: [String]!
-    
+
     public var detectWithCoreML = true
     private var cumulativeTime = 0.0
-    
+
     public var allowFingerDrawing = true
 
     private func touchType() -> UITouch.TouchType {
@@ -41,42 +41,42 @@ class CanvasView: UIImageView {
         }
         return touchType
     }
-    
+
     // MARK: UITouch Overriding
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
 
         if touch.type == touchType() {
             let point = touch.location(in: self)
-            
+
             let date = Date()
             let interval = touchDate.distance(to: date)
-            
+
             let distanceFromLastLocation = distance(point, lastLocation)
-            
+
             touchDate = date
             lastLocation = point
             touchEvents.append((interval: Double(interval), distance: distanceFromLastLocation, point: point))
         }
     }
-    
+
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
         if touch.type == touchType() {
             let point = touch.location(in: self)
             drawLine(touch: touch)
-            
+
             let date = Date()
             let interval = touchDate.distance(to: date)
-            
+
             let distanceFromLastLocation = distance(point, lastLocation)
-            
+
             touchDate = date
             lastLocation = point
             touchEvents.append((interval: Double(interval), distance: distanceFromLastLocation, point: point))
         }
     }
-    
+
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         DispatchQueue.main.async(execute: {
             if let rect = self.getBoundingBox(
@@ -84,7 +84,6 @@ class CanvasView: UIImageView {
                 self.displayRegionOfInterest(rect: rect)
                 self.currentROI = rect
                 if let croppedImage = self.image?.cropRect(rect: rect)?.resize(height: 32)?.padding(in: CGRect(x: 0, y: 0, width: 200, height: 32)) {
-                    UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil)
                     let startTime = Date()
                     if self.detectWithCoreML {
                         let ciImage = CIImage(image: croppedImage)
@@ -106,25 +105,25 @@ class CanvasView: UIImageView {
             }
         })
     }
-    
+
     // MARK: Drawing lines
     private func drawLine(touch: UITouch) {
         UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0.0)
         guard let context = UIGraphicsGetCurrentContext() else {
             return
         }
-        
+
         image?.draw(at: .zero)
         updateContext(context: context, touch: touch)
         image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
     }
-    
+
     private func updateContext(context: CGContext, touch: UITouch) {
         let previousLocation = touch.previousLocation(in: self)
         let location = touch.location(in: self)
         let width = getLineWidth(touch: touch)
-        
+
         context.setLineWidth(width)
         context.setLineCap(.round)
         context.setLineJoin(.round)
@@ -132,16 +131,16 @@ class CanvasView: UIImageView {
         context.addLine(to: location)
         context.strokePath()
     }
-    
+
     private func getLineWidth(touch: UITouch) -> CGFloat {
         var width = baseSize
         if touch.force > 0 {
             width = max(width * (touch.force * 0.6 + 0.2), width)
         }
-        
+
         return width
     }
-    
+
     // MARK: Other public functionality
     func clear() {
         image = nil
@@ -151,7 +150,7 @@ class CanvasView: UIImageView {
         cumulativeTime = 0.0
         touchEvents = []
     }
-    
+
     // MARK: Region of Interest inference
     private func collectRegionOfInterest() -> [CGPoint] {
         var regionOfInterest = [CGPoint]()
@@ -164,27 +163,27 @@ class CanvasView: UIImageView {
             }
             regionOfInterest.append(point)
         }
-        
+
         return regionOfInterest
     }
-    
+
     private func getBoundingBox(_ pointSequence: [CGPoint]) -> CGRect? {
         if pointSequence.count == 0 {
             return nil
         }
-        
+
         var xSequence = [CGFloat]()
         var ySequence = [CGFloat]()
         _ = pointSequence.map { point in
             xSequence.append(point.x)
             ySequence.append(point.y)
         }
-        
+
         let xmax = xSequence.max()!
         let xmin = xSequence.min()!
         let ymax = ySequence.max()!
         let ymin = ySequence.min()!
-        
+
         let width = xmax - xmin
         let height = ymax - ymin
         return CGRect(
@@ -193,22 +192,22 @@ class CanvasView: UIImageView {
             width: width + 20,
             height: height + 20)
     }
-    
+
     private func displayRegionOfInterest(rect: CGRect) {
         layer.sublayers = nil
         setNeedsDisplay()
-        
+
         let roiLayer = CAShapeLayer()
         roiLayer.frame = rect
-        
+
         // yellow
         roiLayer.fillColor = CGColor(srgbRed: 255, green: 217, blue: 0, alpha: 0.3)
         roiLayer.strokeColor = CGColor(srgbRed: 255, green: 217, blue: 0, alpha: 0.3)
         roiLayer.path = UIBezierPath(rect: CGRect(x: 0, y: 0, width: rect.size.width, height: rect.size.height)).cgPath
-        
+
         layer.addSublayer(roiLayer)
     }
-    
+
     // MARK: Text Recognition
     lazy var recognitionRequest: VNCoreMLRequest = {
         do {
@@ -218,7 +217,7 @@ class CanvasView: UIImageView {
             fatalError("can't load Vision ML model: \(error)")
         }
     }()
-    
+
     lazy var recognitionRequestWithAPI: VNRecognizeTextRequest = {
         let request = VNRecognizeTextRequest(completionHandler: self.handleRecognitionUsingAPI)
         request.recognitionLevel = .accurate
@@ -226,13 +225,13 @@ class CanvasView: UIImageView {
         request.usesLanguageCorrection = false
         return request
     }()
-    
+
     private func recognitionWithAPI(_ image: CGImage) {
         let requests = [recognitionRequestWithAPI]
         let imageRequestHandler = VNImageRequestHandler(cgImage: image, options: [:])
         try! imageRequestHandler.perform(requests)
     }
-    
+
     private func handleRecognition(request: VNRequest, error: Error?) {
         guard let observations = request.results
             else { fatalError("unexpected result type from VNCoreMLRequest") }
@@ -264,7 +263,7 @@ class CanvasView: UIImageView {
             print(error)
         }
     }
-    
+
     private func handleRecognitionUsingAPI(request: VNRequest?, error: Error?) {
         guard let observations = request?.results as? [VNRecognizedTextObservation] else {
             return
@@ -284,7 +283,7 @@ class CanvasView: UIImageView {
             }
         }
     }
-    
+
     // MARK: AutoComplete
     private func getWordCandidate(observation: String) -> [String] {
         var candidateWords = [String]()
@@ -295,7 +294,7 @@ class CanvasView: UIImageView {
         }
         return candidateWords
     }
-    
+
     private func displayAutoComplete(candidateWords: [String]) {
         if candidateWords.count > 0 {
             let charCount = candidateWords[0].count
@@ -305,7 +304,7 @@ class CanvasView: UIImageView {
             candidateDisplayLayer.font = UIFont(name: "Apple SD Gothic Neo", size: 7)
             candidateDisplayLayer.foregroundColor = UIColor.gray.cgColor
             candidateDisplayLayer.string = candidateWords[0]
-            
+
             layer.addSublayer(candidateDisplayLayer)
         }
     }
