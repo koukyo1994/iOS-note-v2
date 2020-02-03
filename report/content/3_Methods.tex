@@ -24,11 +24,11 @@ Region of interest is a region including a dot sequence of the word or the illus
 To specify the region, two assumptions are made on region of interest.
 
 \begin{enumerate}
-    \item Objects drawn in the region of interest are close in time when drawn
-    \item Objects drawn in the region of interest are spatially close
+    \item Objects drawn in the ROI are close in time when drawn
+    \item Objects drawn in the ROI are spatially close
 \end{enumerate}
 
-Based on these assumptions, ROI is detected by the following algorithm \ref{alg:roi}.
+Based on these assumptions, sequence contained in ROI is detected by the following algorithm \ref{alg:roi}.
 Then the smallest rectangle containing the obtained point sequence is the ROI.
 It should be noted that we prioritize the reduction of the amount of computation and
 terminate the search for subsequences on the way.As a result, points that are not continuous
@@ -36,13 +36,13 @@ in time but close in space may not be included in the ROI depending on the thres
 However, when priority is given to spatial proximity, it is necessary to parse the entire
 trajectory every time we perform ROI detection, and if the size of the point sequence becomes large,
 it may be a bottleneck in calculation. Therefore we decided to use this method, but it should
-be improve in future work.
+be improved in future work.
 
 \begin{algorithm}
 \DontPrintSemicolon
     \KwInput{$S=\{s_1,s_2,\cdots,s_n\}~where~s_i=(c_i, t_i)$}
     \KwOutput{$\sigma=\{s_k, s_k+1, \cdots, s_n\}~1\le k \le n$}
-    subset := \{\} \\
+    $\sigma := \{s_n\}$ \\
     $c_{prev} := c_n$ \\
     $t_{prev} := t_n$ \\
     \For{$s_i~in~reversed(S)\setminus s_n$}
@@ -50,11 +50,11 @@ be improve in future work.
         $c_i, t_i \leftarrow s_i$\\
         \If{$t_{prev} - t_i < t_{threshold}$}
         {
-            $subset \leftarrow subset \cup \{s_i\}$ \\
+            $\sigma\leftarrow \sigma \cup \{s_i\}$ \\
 
         } \Else{
             \If{$distance(c_{prev}, c_i) < c_{threshold}$}{
-                $subset \leftarrow subset \cup \{s_i\}$
+                $\sigma \leftarrow \sigma \cup \{s_i\}$
             } \Else {
                 break
             }
@@ -134,7 +134,7 @@ We implemented auto-completion to be performed each time the pen is released fro
 \subsection{Dataset}
 
 Handwritten character recognition and handwritten sentence recognition are
-fields that have been studied for a long time, so there are many data sets,
+fields that have been studied for a long time, so there are many data sets\footnote{https://www.kaggle.com/vaibhao/handwritten-characters}\footnote{https://www.kaggle.com/ashishguptajiit/handwritten-az}\footnote{https://www.kaggle.com/sachinpatel21/az-handwritten-alphabets-in-csv-format}\cite{Dua:2019},
 but these are often provided in different formats, and there is some difficulty
 in eliminating differences between formats and using them for training dataset.
 We therefore took an approach to create a composite dataset by
